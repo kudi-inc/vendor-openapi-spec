@@ -4,7 +4,7 @@ info:
   title: Vendor API Dev
   version: 1.0.0
 servers:
-  - url: https://vendor-api-dev.kudi.ng
+  - url: http://vendor-api-dev.kudi.ng/v1
 tags:
   - name: Accounts
   - name: Terminals
