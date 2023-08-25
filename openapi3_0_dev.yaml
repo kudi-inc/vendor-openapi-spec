@@ -4,7 +4,7 @@ info:
   title: Vendor API Dev
   version: 1.0.0
 servers:
-  - url: https://vendor-api-dev.kudi.ng/v1
+  - url: https://vendor-api-dev.kudi.ng
 tags:
   - name: Accounts
   - name: Terminals
@@ -13,7 +13,7 @@ tags:
   - name: Payout
   - name: Authenticate
 paths:
-  /v1/oauth2/token/issue:
+  /v1/auth/token/issue:
     post:
       description: >-
         You can use this endpoint to [authenticate with
@@ -186,7 +186,7 @@ paths:
       summary: Obtain access token from the Nomba system
       tags:
         - Authenticate
-  /v1/oauth2/token/refresh:
+  /v1/auth/token/refresh:
     post:
       description: >-
         You can use this endpoint to refresh an expired `access_token`. More
@@ -355,7 +355,7 @@ paths:
       summary: Refresh an expired token
       tags:
         - Authenticate
-  /v1/oauth2/token/revoke:
+  /v1/auth/token/revoke:
     post:
       description: >-
         You can use this endpoint to revoke an `access_token`. More details
