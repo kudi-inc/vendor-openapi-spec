@@ -20,6 +20,9 @@ paths:
         Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)
         using either the `client-credentials` approach or the `pkce` approach.
       operationId: Issue an access token
+      "parameters": [
+        "$ref": "#/components/parameters/accountId"
+      ]
       requestBody:
         content:
           application/json:
@@ -3805,6 +3808,16 @@ paths:
       tags:
         - Payout
 components:
+  parameters:
+    accountId: {
+        "description": "The Account ID of the Business who owns this API Key",
+        "in": "header",
+        "name": "accountId",
+        "required": true,
+        "schema": {
+          "type": "string"
+        }
+    },
   schemas:
     Account:
       type: object
