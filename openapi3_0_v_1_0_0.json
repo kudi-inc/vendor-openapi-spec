@@ -1,13 +1,26 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "description": "Vendor API",
+    "description": "",
     "title": "Vendor API",
     "version": "1.0.0"
   },
   "servers": [
     {
+      "description": "Production",
       "url": "https://api.nomba.com"
+    },
+    {
+      "description": "Sandbox",
+      "url": "https://sandbox.nomba.com"
+    },
+    {
+      "description": "Staging",
+      "url": "https://vendor-api-staging.kudi.ng"
+    },
+    {
+      "description": "Development",
+      "url": "https://vendor-api-dev.kudi.ng"
     }
   ],
   "tags": [
@@ -5802,7 +5815,7 @@
     },
     "securitySchemes": {
       "BearerAuth": {
-        "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`, with a `\"Bearer\"` prefix. For example: `Authorization: Bearer {ACCESS_TOKEN}`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
+        "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`. For example: `Authorization: {ACCESS_TOKEN}`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
         "scheme": "bearer",
         "type": "http",
         "bearerFormat": "JWT"
