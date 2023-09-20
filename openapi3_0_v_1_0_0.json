@@ -13,14 +13,6 @@
     {
       "description": "Sandbox",
       "url": "https://sandbox.nomba.com"
-    },
-    {
-      "description": "Staging",
-      "url": "https://vendor-api-staging.kudi.ng"
-    },
-    {
-      "description": "Development",
-      "url": "https://vendor-api-dev.kudi.ng"
     }
   ],
   "tags": [
