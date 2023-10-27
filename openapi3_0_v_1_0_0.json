@@ -32,7 +32,7 @@
       "name": "Transfers"
     },
     {
-      "name": "Checkout"
+      "name": "Online Checkout"
     }
   ],
   "paths": {
@@ -4634,8 +4634,9 @@
     },
     "/v1/checkout/order": {
       "post": {
-        "description": "You can use this endpoint to perform checking out of order",
-        "operationId": "create checkout order",
+        "description": "You can use this endpoint to create an online checkout order. Load the URL returned in 'checkoutLink' property
+        in a browser to allow your customer to initiate payment.",
+        "operationId": "create an online checkout order",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4644,7 +4645,7 @@
               }
             }
           },
-          "description": "The request payload required to perform a wallet transfer.",
+          "description": "The request payload required to create a checkout order.",
           "required": true
         },
         "responses": {
@@ -4767,9 +4768,9 @@
             "BearerAuth": []
           }
         ],
-        "summary": "create checkout order.",
+        "summary": "Create an online checkout order.",
         "tags": [
-          "Create Order"
+          "Create an Online Checkout Order"
         ]
       }
     }
@@ -4786,7 +4787,7 @@
           },
           "orderReference": {
             "type": "string",
-            "description": "reference of order created",
+            "description": "reference of the online checkout order created",
             "example": "uyett7883"
           }
         }
@@ -4796,7 +4797,7 @@
         "properties": {
           "orderReference":{
             "type": "string",
-            "description": "reference of order to be created",
+            "description": "reference of the online checkout order to be created",
             "example": "uyett7883"
           },
           "customerId": {
