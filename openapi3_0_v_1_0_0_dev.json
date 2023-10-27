@@ -7,8 +7,12 @@
   },
   "servers": [
     {
-      "description": "Development",
-      "url": "https://vendor-api-dev.nomba.com"
+      "description": "Production",
+      "url": "https://api.nomba.com"
+    },
+    {
+      "description": "Sandbox",
+      "url": "https://sandbox.nomba.com"
     }
   ],
   "tags": [
@@ -26,6 +30,9 @@
     },
     {
       "name": "Transfers"
+    },
+    {
+      "name": "Checkout"
     }
   ],
   "paths": {
@@ -4624,10 +4631,208 @@
           "Transactions"
         ]
       }
+    },
+    "/v1/checkout/order": {
+      "post": {
+        "description": "You can use this endpoint to perform checking out of order",
+        "operationId": "create checkout order",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderRequest"
+              }
+            }
+          },
+          "description": "The request payload required to perform a wallet transfer.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "checkout order created successful"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CreateOrderResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "create checkout order.",
+        "tags": [
+          "Create Order"
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "CreateOrderResponse":{
+        "type": "object",
+        "properties": {
+          "checkoutLink": {
+            "type": "string",
+            "description": "check-out link",
+            "example": "https://ip:port/checkout/78388899938"
+          },
+          "orderReference": {
+            "type": "string",
+            "description": "reference of order created",
+            "example": "uyett7883"
+          }
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderReference":{
+            "type": "string",
+            "description": "reference of order to be created",
+            "example": "uyett7883"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "customer id",
+            "example": "762878"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "customer email",
+            "example": "abcde@gmail.com"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Amount to pay",
+            "example": "7689007667"
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency of the money",
+            "example": "NGN"
+          }
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "description": "Order object",
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            }
+          }
+        }
+      },
       "BankAccountTransferMetaObject": {
         "type": "object",
         "properties": {
