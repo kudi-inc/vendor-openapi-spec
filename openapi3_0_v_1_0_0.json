@@ -4803,7 +4803,12 @@
           "customerId": {
             "type": "string",
             "description": "customer id",
-            "example": "762878"
+            "example": "identity123"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "The URL we will redirect your customer to after payment is made",
+            "example": "https://www.google.com"
           },
           "customerEmail": {
             "type": "string",
