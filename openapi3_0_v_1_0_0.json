@@ -4829,36 +4829,9 @@
           "order": {
             "type": "object",
             "description": "Order object",
-            "orderReference": {
-              "type": "string",
-              "description": "A unique identifier of the checkout order/payment",
-              "example": "unique123"
-            },
-            "callbackUrl": {
-              "type": "string",
-              "description": "A URL we will redirect to after your customer has completed payment on the Nomba checkout page",
-              "example": "https://www.google.com"
-            },
-            "customerEmail": {
-              "type": "string",
-              "description": "Your customer's email for reference",
-              "example": "test@gmail.com"
-            },
-            "amount": {
-              "type": "number",
-              "description": "Amount for your customer to pay",
-              "example": 50
-            },
-            "currency": {
-              "type": "string",
-              "description": "Currency of the payment amount",
-              "example": "NGN"
-            },
-            "customerId": {
-              "type": "string",
-              "description": "A unique identifier of your customer",
-              "example": "identifier123"
-            },
+            "items": {
+              "$ref": "#/components/schemas/Order"
+            }
           }
         }
       },
