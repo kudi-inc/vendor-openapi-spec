@@ -4634,8 +4634,9 @@
     },
     "/v1/checkout/order": {
       "post": {
-        "description": "You can use this endpoint to create an online checkout order. Load the URL returned in 'checkoutLink' property in a browser to allow your customer initiate payment.",
-        "operationId": "Create an online checkout order",
+        "description": "You can use this endpoint to create an online checkout order. Load the URL returned in 'checkoutLink' property
+        in a browser to allow your customer to initiate payment.",
+        "operationId": "create an online checkout order",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4769,1538 +4770,1251 @@
         ],
         "summary": "Create an online checkout order.",
         "tags": [
-          "Online Checkout"
+          "Create an Online Checkout Order"
         ]
       }
-    },
-    "/v1/checkout/tokenized-card-payment": {
-      "post": {
-        "description": "You can use this endpoint to charge a customer's card using the tokenized card details.",
-        "operationId": "charge customer with tokenized card data",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenizedCardPaymentRequest"
-              }
-            }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CreateOrderResponse":{
+        "type": "object",
+        "properties": {
+          "checkoutLink": {
+            "type": "string",
+            "description": "check-out link",
+            "example": "https://ip:port/checkout/78388899938"
           },
-          "description": "The request payload required to perform a tokenized payment.",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "payment successful"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/TokenizedCardPaymentResponse"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
+          "orderReference": {
+            "type": "string",
+            "description": "reference of the online checkout order created",
+            "example": "uyett7883"
           }
-        },
-        "security": [
-          {
-            "BearerAuth": []
+        }
+      },
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderReference":{
+            "type": "string",
+            "description": "reference of the online checkout order to be created",
+            "example": "uyett7883"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "customer id",
+            "example": "762878"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "customer email",
+            "example": "abcde@gmail.com"
+          },
+          "amount": {
+            "type": "integer",
+            "description": "Amount to pay",
+            "example": "7689007667"
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency of the money",
+            "example": "NGN"
           }
-        ],
-        "summary": "charge a customer using Tokenized card data",
-        "tags": [
-          "Online Checkout"
-        ]
-      }
-    },
-    "components": {
-      "schemas": {
-        "CreateOrderResponse": {
-          "type": "object",
-          "properties": {
-            "checkoutLink": {
-              "type": "string",
-              "description": "Payment checkout link",
-              "example": "https://ip:port/checkout/78388899938"
-            },
-            "orderReference": {
-              "type": "string",
-              "description": "The reference of the order created",
-              "example": "uyett7883"
-            }
-          },
-          "required": [
-            "checkoutLink",
-            "orderReference"
-          ]
-        },
-        "Order": {
-          "type": "object",
-          "properties": {
-            "orderReference": {
-              "type": "string",
-              "description": "reference of the online checkout order to be created",
-              "example": "uyett7883"
-            },
-            "customerId": {
-              "type": "string",
-              "description": "customer id",
-              "example": "762878"
-            },
-            "callbackUrl": {
-              "type": "string",
-              "description": "Merchant callback url for redirect after payment",
-              "example": "https://ip:port/merchant.com/callback"
-            },
-            "customerEmail": {
-              "type": "string",
-              "description": "customer email",
-              "example": "abcde@gmail.com"
-            },
-            "amount": {
-              "type": "integer",
-              "description": "Amount to pay",
-              "example": "7689007667"
-            },
-            "currency": {
-              "type": "string",
-              "description": "currency of the money",
-              "example": "NGN"
-            }
-          }
-        },
-        "CreateOrderRequest": {
-          "type": "object",
-          "description": "The Checkout request object",
-          "properties": {
-            "order": {
-              "type": "object",
-              "description": "Order object",
-              "items": {
-                "$ref": "#/components/schemas/Order"
-              }
-            },
-            "tokenizeCard": {
-              "type": "boolean",
-              "description": "Determines if the card used for payment is to be tokenized",
-              "example": "true"
-            }
-          },
-          "required": [
-            "order"
-          ]
-        },
-        "TokenizedCardPaymentRequest": {
-          "type": "object",
-          "description": "The Checkout request object",
-          "properties": {
-            "orderReference": {
-              "type": "string",
-              "description": "reference of the online checkout order to be created",
-              "example": "uyett7883"
-            },
-            "tokenKey": {
-              "type": "string",
-              "description": "the token key returned in the webhook",
-              "example": "7628788443"
-            },
-            "customerEmail": {
-              "type": "string",
-              "description": "customer email",
-              "example": "abcde@gmail.com"
-            },
-            "amount": {
-              "type": "integer",
-              "description": "Amount to pay",
-              "example": "7689007667"
-            },
-            "currency": {
-              "type": "string",
-              "description": "currency of the money",
-              "example": "NGN"
-            }
-          }
-        },
-        "TokenizedCardPaymentResponse": {
-          "type": "object",
-          "properties": {
-            "status": {
-              "type": "boolean",
-              "description": "status of the transaction",
-              "example": "true"
-            },
-            "message": {
-              "type": "string",
-              "description": "some details of the transaction response.",
-              "example": "success"
-            }
-          }
-        },
-        "BankAccountTransferMetaObject": {
-          "type": "object",
-          "properties": {
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Merchant transaction reference",
-              "example": "3JVW2xJCjj443oannREBuTaXDdji"
-            },
-            "api_client_id": {
-              "type": "string",
-              "description": "API client ID",
-              "example": "6a7bed88-7c93-4a1c-a445-f88edbca6489"
-            },
-            "api_account_id": {
-              "type": "string",
-              "description": "API account ID",
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "rrn": {
-              "type": "string",
-              "description": "RRN (Retrieval Reference Number)",
-              "example": "230908151711"
-            }
-          },
-          "description": "Transaction meta data"
-        },
-        "BankAccountTransferRequest": {
-          "type": "object",
-          "description": "A structure representing an object required to post a bank account transfer.",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "The amount to be transferred.",
-              "example": 3500
-            },
-            "accountNumber": {
-              "type": "string",
-              "description": "The destination bank account number.",
-              "example": "0554772814",
-              "maxLength": 10,
-              "minLength": 10
-            },
-            "accountName": {
-              "type": "string",
-              "description": "The name on the account.",
-              "example": "M.A Animashaun"
-            },
-            "bankCode": {
-              "type": "string",
-              "description": "The code of the recipient bank.",
-              "example": "058"
-            },
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Unique reference used to track a transaction from an external process.",
-              "example": "UNQ_123abGGhh5546"
-            },
-            "senderName": {
-              "type": "string",
-              "description": "Sender name",
-              "example": "Nightly Post"
-            },
-            "pin": {
-              "type": "string",
-              "description": "PIN",
-              "example": "2222"
-            }
-          },
-          "required": [
-            "amount",
-            "accountNumber",
-            "bankCode",
-            "accountName",
-            "merchantTxRef",
-            "senderName",
-            "pin"
-          ]
-        },
-        "BankAccountTransferResult": {
-          "type": "object",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "Transfer amount",
-              "example": 5502.0
-            },
-            "meta": {
-              "$ref": "#/components/schemas/BankAccountTransferMetaObject"
-            },
-            "fee": {
-              "type": "number",
-              "format": "double",
-              "description": "Transfer fee",
-              "example": 50.0
-            },
-            "timeCreated": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Creation timestamp",
-              "example": "2023-09-08T14:17:13.634Z"
-            },
-            "id": {
-              "type": "string",
-              "description": "Transfer ID",
-              "example": "API-TRANSFER-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
-            },
-            "type": {
-              "type": "string",
-              "description": "Transfer type",
-              "example": "transfer"
-            },
-            "status": {
-              "type": "string",
-              "description": "Transfer status",
-              "example": "SUCCESS"
-            }
-          },
-          "required": [
-            "amount",
-            "meta",
-            "fee",
-            "timeCreated",
-            "id",
-            "type",
-            "status"
-          ],
-          "description": "Transfer data"
-        },
-        "BankAccountLookupRequest": {
-          "type": "object",
-          "description": "A structure representing a bank account lookup request",
-          "properties": {
-            "accountNumber": {
-              "type": "string",
-              "description": "The account number to be looked up.",
-              "example": "0554772814",
-              "maxLength": 10,
-              "minLength": 10
-            },
-            "bankCode": {
-              "type": "string",
-              "description": "The bankCode of the bank the account number belongs to. This can be obtained from a call to `/v1/transfers/bank` ",
-              "example": "053"
-            }
-          },
-          "required": [
-            "accountNumber",
-            "bankCode"
-          ]
-        },
-        "BankAccountLookupResult": {
-          "type": "object",
-          "description": "A structure representing a bank account lookup result",
-          "properties": {
-            "accountNumber": {
-              "type": "string",
-              "description": "The account number already looked up.",
-              "example": "0554772814",
-              "maxLength": 10,
-              "minLength": 10
-            },
-            "accountName": {
-              "type": "string",
-              "description": "The name on the account.",
-              "example": "M.A Animashaun"
-            }
-          }
-        },
-        "Banks": {
-          "type": "object",
-          "description": "A structure representing a bank",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "The bank's code.",
-              "example": "056",
-              "maxLength": 6,
-              "minLength": 3
-            },
-            "name": {
-              "type": "string",
-              "description": "The bank's name.",
-              "example": "GTB"
-            }
-          }
-        },
-        "BanksListResults": {
-          "type": "object",
-          "properties": {
-            "results": {
-              "type": "array",
-              "description": "Contains result of all banks fetched",
-              "items": {
-                "$ref": "#/components/schemas/Banks"
-              }
-            }
-          }
-        },
-        "CreateAccountRequest": {
-          "type": "object",
-          "properties": {
-            "accountRef": {
-              "type": "string",
-              "description": "Account reference",
-              "minLength": 16,
-              "maxLength": 64,
-              "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
-            },
-            "phoneNumber": {
-              "type": "string",
-              "description": "Phone number",
-              "minLength": 11,
-              "maxLength": 15,
-              "example": "2348188667581"
-            },
-            "email": {
-              "type": "string",
-              "description": "Email address",
-              "format": "email",
-              "example": "ifeol-subaccount@exmple.com"
-            },
-            "bvn": {
-              "type": "string",
-              "description": "Bank Verification Number (BVN)",
-              "minLength": 11,
-              "maxLength": 11,
-              "example": "12234412345"
-            },
-            "pin": {
-              "type": "string",
-              "description": "Personal Identification Number (PIN)",
-              "minLength": 4,
-              "maxLength": 4,
-              "example": "1234"
-            },
-            "accountName": {
-              "type": "string",
-              "description": "Account holder's name",
-              "minLength": 8,
-              "maxLength": 64,
-              "example": "Daniel Scorsese"
-            },
-            "currency": {
-              "type": "string",
-              "description": "Currency code",
-              "minLength": 3,
-              "maxLength": 3,
-              "example": "NGN"
-            }
-          },
-          "required": [
-            "accountRef",
-            "phoneNumber",
-            "email",
-            "bvn",
-            "pin",
-            "accountName",
-            "currency"
-          ]
-        },
-        "CreateAccountResponse": {
-          "type": "object",
-          "properties": {
-            "createdAt": {
-              "type": "string",
-              "description": "Creation timestamp",
-              "format": "date-time",
-              "example": "2023-09-04T07:09:06.900Z"
-            },
-            "accountId": {
-              "type": "string",
-              "description": "Account ID",
-              "minLength": 36,
-              "maxLength": 36,
-              "example": "fc81b80e-e607-4b86-8591-840925191733"
-            },
-            "accountHolderId": {
-              "type": "string",
-              "description": "Account holder ID",
-              "minLength": 36,
-              "maxLength": 36,
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "accountRef": {
-              "type": "string",
-              "description": "Account reference",
-              "minLength": 16,
-              "maxLength": 64,
-              "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
-            },
-            "phoneNumber": {
-              "type": "string",
-              "description": "Phone number",
-              "minLength": 11,
-              "maxLength": 15,
-              "example": "2348188667581"
-            },
-            "email": {
-              "type": "string",
-              "description": "Email address",
-              "format": "email",
-              "example": "ifeol-subaccount-4@exmple.com"
-            },
-            "bvn": {
-              "type": "string",
-              "description": "Bank Verification Number (BVN)",
-              "minLength": 11,
-              "maxLength": 11,
-              "example": "12234412345"
-            },
-            "status": {
-              "type": "string",
-              "description": "Account status",
-              "enum": [
-                "ACTIVE",
-                "INACTIVE",
-                "SUSPENDED",
-                "PND",
-                "BLACKLISTED"
-              ],
-              "example": "ACTIVE"
-            },
-            "type": {
-              "type": "string",
-              "description": "Account type",
-              "enum": [
-                "virtual",
-                "outlet"
-              ],
-              "example": "virtual"
-            },
-            "accountName": {
-              "type": "string",
-              "description": "Account holder's name",
-              "minLength": 8,
-              "maxLength": 64,
-              "example": "Daniel Scorsese"
-            },
-            "currency": {
-              "type": "string",
-              "description": "Currency code",
-              "minLength": 3,
-              "maxLength": 3,
-              "example": "NGN"
-            }
-          },
-          "required": [
-            "createdAt",
-            "accountId",
-            "accountHolderId",
-            "accountRef",
-            "phoneNumber",
-            "email",
-            "bvn",
-            "status",
-            "type",
-            "accountName",
-            "currency"
-          ]
-        },
-        "RateLimitError": {
-          "type": "object",
-          "description": "Rate-limit error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "429"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Too many requests"
-            }
-          }
-        },
-        "AuthenticationError": {
-          "type": "object",
-          "description": "Authentication Error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "401"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Unauthorized"
-            }
-          }
-        },
-        "AuthorizationError": {
-          "type": "object",
-          "description": "Permissions error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "403"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Forbidden"
-            }
-          }
-        },
-        "RecordNotFoundError": {
-          "type": "object",
-          "description": "Record-Not-Found error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "404"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Record not found"
-            }
-          }
-        },
-        "RequestError": {
-          "type": "object",
-          "description": "Request Error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "400"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Request failed."
-            }
-          }
-        },
-        "ServerError": {
-          "type": "object",
-          "description": "Server error response.",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "API error code.",
-              "example": "500"
-            },
-            "description": {
-              "type": "string",
-              "description": "Additional details about the error.",
-              "example": "Server error"
-            }
-          }
-        },
-        "IssueTokenRequest": {
-          "type": "object",
-          "description": "A structure representing an authentication request.",
-          "properties": {
-            "grant_type": {
-              "type": "string",
-              "description": "The grant type of the authentication.",
-              "enum": [
-                "client_credentials",
-                "refresh_token"
-              ],
-              "example": "client_credentials"
-            },
-            "client_id": {
-              "type": "string",
-              "description": "The client's id as obtained from your Nomba dashboard.",
-              "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
-              "maxLength": 36,
-              "minLength": 36
-            },
-            "client_secret": {
-              "type": "string",
-              "description": "The client's secret as obtained from your Nomba dashboard. It is securely generated by the Nomba system",
-              "example": "JFJ8yq3G4+DvjivJMsji0YkZBkkKdSdjifR+TgT9RLM=",
-              "maxLength": 44,
-              "minLength": 44
-            }
-          },
-          "required": [
-            "grant_type",
-            "client_id",
-            "client_secret"
-          ]
-        },
-        "IssueTokenResponse": {
-          "type": "object",
-          "description": "A structure representing an authentication result.",
-          "properties": {
-            "businessId": {
-              "type": "string",
-              "description": "The accountId of the merchant/business that is connecting to the Nomba system via API",
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "access_token": {
-              "type": "string",
-              "description": "A JWT (Json Web Token) token used to grant access to resources on the Nomba API.",
-              "example": "eyJhbGciOiJIUzI1NiJ9.eyJHOjhmYWM4M2FjLTc2YjAtNDM1Zi1hYTM1LThkOTU3ZGQ5MjdkZCI6Ikc6OGZhYzgzYWMtNzZiMC00MzVmLWFhMzUtOGQ5NTdkZDkyN2RkIiwiUjpURUFNU19PV05FUiI6IlI6VEVBTVNfT1dORVIiLCJFbWFpbDp2aWN0b3JzaG9hZ2FAZ21haWwuY29tIjoiRW1haWw6dmljdG9yc2hvYWdhQGdtYWlsLmNvbSIsImlhdCI6MTY4MTkxODU3OSwic3ViIjoiNWUyNmNmYjAtNTI5Zi00MTdiLWI4ZDItYWJjNDcxZjRjOWRiIiwiZXhwIjoxNjgxOTIyMTc5fQ.lQOsyhR1gajKdzE9IHQEtxhQyUrArctEDZiP9pWVTFY",
-              "maxLength": 600,
-              "minLength": 300
-            },
-            "refresh_token": {
-              "type": "string",
-              "description": "A Base64 Encoded String used to refresh an expired access_token",
-              "example": "01h4gdx2tctxfjgacbdwrcvs5d1688473602892",
-              "maxLength": 60,
-              "minLength": 30
-            },
-            "expiresAt": {
-              "type": "string",
-              "description": "The date and time this entity was created. This value uses Coordinated Universal Time (UTC) and ISO 8601 format – `YYYY-MM-DDThh:mm:ssZ`.",
-              "example": "2022-07-08T14:33:00Z"
-            }
-          },
-          "required": [
-            "businessId",
-            "access_token",
-            "refresh_token",
-            "expiresAt"
-          ]
-        },
-        "RefreshTokenRequest": {
-          "type": "object",
-          "description": "A structure representing a refresh token request.",
-          "properties": {
-            "grant_type": {
-              "type": "string",
-              "description": "The grant type of the authentication.",
-              "enum": [
-                "client_credentials",
-                "refresh_token"
-              ],
-              "example": "refresh_token"
-            },
-            "refresh_token": {
-              "type": "string",
-              "description": "A Base64 Encoded String used to refresh an expired access_token",
-              "example": "01h4gdx2tctxfjgacbdwrcvs5d1688473602892",
-              "maxLength": 60,
-              "minLength": 30
-            }
-          },
-          "required": [
-            "grant_type",
-            "refresh_token"
-          ]
-        },
-        "RevokeTokenRequest": {
-          "type": "object",
-          "description": "A structure representing a request to revoke a token.",
-          "properties": {
-            "clientId": {
-              "type": "string",
-              "description": "The client's id as obtained from your Nomba dashboard.",
-              "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
-              "maxLength": 36,
-              "minLength": 36
-            },
-            "access_token": {
-              "type": "string",
-              "description": "The JWT (Json Web Token) token to be revoked",
-              "example": "eyJhbGciOiJIUzI1NiJ9.eyJHOjhmYWM4M2FjLTc2YjAtNDM1Zi1hYTM1LThkOTU3ZGQ5MjdkZCI6Ikc6OGZhYzgzYWMtNzZiMC00MzVmLWFhMzUtOGQ5NTdkZDkyN2RkIiwiUjpURUFNU19PV05FUiI6IlI6VEVBTVNfT1dORVIiLCJFbWFpbDp2aWN0b3JzaG9hZ2FAZ21haWwuY29tIjoiRW1haWw6dmljdG9yc2hvYWdhQGdtYWlsLmNvbSIsImlhdCI6MTY4MTkxODU3OSwic3ViIjoiNWUyNmNmYjAtNTI5Zi00MTdiLWI4ZDItYWJjNDcxZjRjOWRiIiwiZXhwIjoxNjgxOTIyMTc5fQ.lQOsyhR1gajKdzE9IHQEtxhQyUrArctEDZiP9pWVTFY",
-              "maxLength": 600,
-              "minLength": 300
-            }
-          },
-          "required": [
-            "clientId",
-            "access_token"
-          ]
-        },
-        "RevokeTokenResponse": {
-          "type": "object",
-          "description": "A structure representing a response from an attempt to revoke a token",
-          "properties": {
-            "code": {
-              "type": "string",
-              "description": "Tells if the access_token has been revoked",
-              "example": "00"
-            },
-            "description": {
-              "type": "string",
-              "description": "Describes the result of the action performed",
-              "example": "Token revoked successfully"
-            }
-          }
-        },
-        "AccountDetailsResponse": {
-          "type": "object",
-          "properties": {
-            "createdAt": {
-              "type": "string",
-              "description": "Creation timestamp",
-              "format": "date-time",
-              "example": "2023-09-04T07:09:06.900Z"
-            },
-            "accountId": {
-              "type": "string",
-              "description": "Account ID",
-              "minLength": 36,
-              "maxLength": 36,
-              "example": "fc81b80e-e607-4b86-8591-840925191733"
-            },
-            "accountHolderId": {
-              "type": "string",
-              "description": "Account holder ID",
-              "minLength": 36,
-              "maxLength": 36,
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "accountRef": {
-              "type": "string",
-              "description": "Account reference",
-              "minLength": 16,
-              "maxLength": 64,
-              "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
-            },
-            "bvn": {
-              "type": "string",
-              "description": "Bank Verification Number (BVN)",
-              "minLength": 11,
-              "maxLength": 11,
-              "example": "12234412345"
-            },
-            "status": {
-              "type": "string",
-              "description": "Account status",
-              "enum": [
-                "ACTIVE",
-                "INACTIVE",
-                "SUSPENDED",
-                "PND",
-                "BLACKLISTED"
-              ],
-              "example": "ACTIVE"
-            },
-            "type": {
-              "type": "string",
-              "description": "Account type",
-              "enum": [
-                "virtual",
-                "outlet"
-              ],
-              "example": "virtual"
-            },
-            "accountName": {
-              "type": "string",
-              "description": "Account holder's name",
-              "minLength": 8,
-              "maxLength": 64,
-              "example": "Daniel Scorsese"
-            },
-            "currency": {
-              "type": "string",
-              "description": "Currency code",
-              "minLength": 3,
-              "maxLength": 3,
-              "example": "NGN"
-            },
-            "banks": {
-              "type": "array",
-              "description": "List of associated bank accounts",
-              "items": {
-                "type": "object",
-                "properties": {
-                  "bankAccountNumber": {
-                    "type": "string",
-                    "description": "Bank account number",
-                    "example": "93910"
-                  },
-                  "bankName": {
-                    "type": "string",
-                    "description": "Bank name",
-                    "example": "Sterling Bank"
-                  },
-                  "bankAccountName": {
-                    "type": "string",
-                    "description": "Bank account holder name",
-                    "example": "Nomba/Ifeoluwa Adeboye"
-                  }
-                },
-                "required": [
-                  "bankAccountNumber",
-                  "bankName",
-                  "bankAccountName"
-                ]
-              }
-            }
-          },
-          "required": [
-            "createdAt",
-            "accountId",
-            "accountHolderId",
-            "accountRef",
-            "bvn",
-            "status",
-            "type",
-            "accountName",
-            "banks",
-            "currency"
-          ]
-        },
-        "AccountBalanceResponse": {
-          "type": "object",
-          "properties": {
-            "amount": {
-              "type": "string",
-              "description": "Account balance",
-              "example": "281946.0"
-            },
-            "currency": {
-              "type": "string",
-              "minLength": 3,
-              "maxLength": 3,
-              "description": "Currency code",
-              "example": "NGN"
-            },
-            "timeCreated": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Account creation timestamp",
-              "example": "2023-08-30T14:56:59.000Z"
-            }
-          },
-          "required": [
-            "amount",
-            "currency",
-            "timeCreated"
-          ]
-        },
-        "TerminalAssignmentRequest": {
-          "type": "object",
-          "properties": {
-            "serialNumber": {
-              "type": "string",
-              "description": "Serial number",
-              "example": "55555555"
-            },
-            "terminalLabel": {
-              "type": "string",
-              "description": "Terminal label",
-              "example": "Testing"
-            }
-          },
-          "required": [
-            "serialNumber"
-          ]
-        },
-        "TerminalResult": {
-          "type": "object",
-          "properties": {
-            "terminalId": {
-              "type": "string",
-              "description": "Terminal ID",
-              "example": "201124LM"
-            },
-            "serialNumber": {
-              "type": "string",
-              "description": "Serial number",
-              "example": "55555555"
-            },
-            "accountId": {
-              "type": "string",
-              "description": "Account ID",
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "parentAccountId": {
-              "type": "string",
-              "description": "Parent account ID",
-              "example": ""
-            },
-            "merchantName": {
-              "type": "string",
-              "description": "Merchant name",
-              "example": "trident and rees"
-            },
-            "terminalLabel": {
-              "type": "string",
-              "description": "Terminal label",
-              "example": "Testing"
-            },
-            "createdAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Creation timestamp",
-              "example": "2020-09-23T10:21:48.789Z"
-            },
-            "updatedAt": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Update timestamp",
-              "example": "2023-09-04T15:23:55.173Z"
-            }
-          },
-          "required": [
-            "terminalId",
-            "serialNumber",
-            "accountId",
-            "parentAccountId",
-            "merchantName",
-            "terminalLabel",
-            "createdAt",
-            "updatedAt"
-          ]
-        },
-        "TerminalListResults": {
-          "type": "object",
-          "properties": {
-            "results": {
-              "type": "array",
-              "description": "Contains list of terminals",
-              "items": {
-                "$ref": "#/components/schemas/TerminalResult"
-              }
-            },
-            "cursor": {
-              "type": "string",
-              "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
-              "example": "xchbaVFsjdsbaADddd"
-            }
-          }
-        },
-        "WalletTransferMetaObject": {
-          "type": "object",
-          "properties": {
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Merchant transaction reference",
-              "example": "3JVW2xJCjj443oannREBuTaXDdji"
-            },
-            "api_client_id": {
-              "type": "string",
-              "description": "API client ID",
-              "example": "6a7bed88-7c93-4a1c-a445-f88edbca6489"
-            },
-            "api_account_id": {
-              "type": "string",
-              "description": "API account ID",
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "rrn": {
-              "type": "string",
-              "description": "RRN (Retrieval Reference Number)",
-              "example": "230908151711"
-            }
-          },
-          "description": "Transaction meta data"
-        },
-        "WalletTransferRequest": {
-          "type": "object",
-          "description": "A structure representing an object required to post a wallet transfer.",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "The amount to be transferred.",
-              "example": 3500
-            },
-            "receiverAccountId": {
-              "type": "string",
-              "format": "uuid",
-              "description": "The receiver's accountId.",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Unique reference used to track a transaction from an external process.",
-              "example": "UNQ_123abGGhh5546"
-            },
-            "pin": {
-              "type": "string",
-              "description": "PIN",
-              "example": "2222"
-            }
-          },
-          "required": [
-            "amount",
-            "accountNumber",
-            "bankCode",
-            "accountName",
-            "merchantTxRef",
-            "senderName",
-            "pin"
-          ]
-        },
-        "WalletTransferResult": {
-          "type": "object",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "Transfer amount",
-              "example": 5502.0
-            },
-            "meta": {
-              "$ref": "#/components/schemas/WalletTransferMetaObject"
-            },
-            "fee": {
-              "type": "number",
-              "format": "double",
-              "description": "Transfer fee",
-              "example": 50.0
-            },
-            "timeCreated": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Creation timestamp",
-              "example": "2023-09-08T14:17:13.634Z"
-            },
-            "id": {
-              "type": "string",
-              "description": "Transfer ID",
-              "example": "API-TRANSFER-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
-            },
-            "type": {
-              "type": "string",
-              "description": "Transfer type",
-              "example": "transfer"
-            },
-            "status": {
-              "type": "string",
-              "description": "Transfer status",
-              "example": "SUCCESS"
-            }
-          },
-          "required": [
-            "amount",
-            "meta",
-            "fee",
-            "timeCreated",
-            "id",
-            "type",
-            "status"
-          ],
-          "description": "Transfer data"
-        },
-        "BankTransactionMetaObject": {
-          "type": "object",
-          "properties": {
-            "billerId": {
-              "type": "string",
-              "description": "Biller ID",
-              "example": "API_FCIR5UQFMYS"
-            },
-            "terminalActionId": {
-              "type": "string",
-              "description": "Terminal action ID",
-              "example": ""
-            },
-            "productId": {
-              "type": "string",
-              "description": "Product ID",
-              "example": "p2p"
-            },
-            "fee": {
-              "type": "number",
-              "format": "double",
-              "description": "Fee",
-              "example": 0.0
-            },
-            "type": {
-              "type": "string",
-              "description": "Type",
-              "example": "p2p"
-            },
-            "transactionId": {
-              "type": "string",
-              "description": "Transaction ID",
-              "example": "API-P2P-84026-d8a4d658-6747-418d-a7e2-37bc6290310d"
-            },
-            "rrn": {
-              "type": "string",
-              "description": "RRN (Retrieval Reference Number)",
-              "example": ""
-            },
-            "parentAccountId": {
-              "type": "string",
-              "description": "Parent account ID",
-              "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
-            },
-            "terminalLabel": {
-              "type": "string",
-              "description": "Terminal label",
-              "example": ""
-            },
-            "accountId": {
-              "type": "string",
-              "description": "Account ID",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Merchant transaction reference",
-              "example": ""
-            },
-            "transactionAmount": {
-              "type": "number",
-              "format": "double",
-              "description": "Transaction amount",
-              "example": 7000.0
-            },
-            "mCollectionsId": {
-              "type": "string",
-              "description": "MCollections ID",
-              "example": ""
-            }
-          }
-        },
-        "BankTransactionResult": {
-          "type": "object",
-          "properties": {
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "Amount",
-              "example": 7000.0
-            },
-            "currency": {
-              "type": "string",
-              "description": "Currency",
-              "example": "NGN"
-            },
-            "meta": {
-              "$ref": "#/components/schemas/BankTransactionMetaObject"
-            },
-            "status": {
-              "type": "string",
-              "description": "Status",
-              "example": "SUCCESS"
-            },
-            "timeUpdated": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Update timestamp",
-              "example": "2023-09-08T19:05:21.000Z"
-            },
-            "walletBalance": {
-              "type": "number",
-              "format": "double",
-              "description": "Wallet balance",
-              "example": 285951.0
-            },
-            "transactionType": {
-              "type": "string",
-              "description": "Transaction type",
-              "example": "DEBIT"
-            }
-          },
-          "required": [
-            "amount",
-            "currency",
-            "meta",
-            "status",
-            "timeUpdated",
-            "walletBalance",
-            "transactionType"
-          ]
-        },
-        "BankTransactionListResults": {
-          "type": "object",
-          "properties": {
-            "results": {
-              "type": "array",
-              "description": "Contains list of credit/debit transactions",
-              "items": {
-                "$ref": "#/components/schemas/BankTransactionResult"
-              }
-            },
-            "cursor": {
-              "type": "string",
-              "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
-              "example": "xchbaVFsjdsbaADddd"
-            }
-          }
-        },
-        "FilterTransactionRequest": {
-          "type": "object",
-          "properties": {
-            "transactionRef": {
-              "type": "string",
-              "description": "Transaction ID/Reference",
-              "example": "POS-WITHDRAW-DFC05-693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea"
-            },
-            "status": {
-              "type": "string",
-              "description": "Transaction status",
-              "example": "SUCCESS"
-            },
-            "source": {
-              "type": "string",
-              "description": "Transaction source",
-              "example": "pos"
-            },
-            "type": {
-              "type": "string",
-              "description": "Transaction type",
-              "example": "withdrawal"
-            },
-            "terminalId": {
-              "type": "string",
-              "description": "Terminal ID",
-              "example": "2KUD4AKB"
-            },
-            "rrn": {
-              "type": "string",
-              "description": "RRN (Retrieval Reference Number)",
-              "example": "230908202632"
-            },
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Merchant transaction reference",
-              "example": "c90d-4b25-ad0f"
-            }
-          }
-        },
-        "TransactionResult": {
-          "type": "object",
-          "properties": {
-            "id": {
-              "type": "string",
-              "description": "Transaction ID",
-              "example": "POS-WITHDRAW-DFC05-693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea"
-            },
-            "status": {
-              "type": "string",
-              "description": "Transaction status",
-              "example": "PAYMENT_FAILED"
-            },
-            "amount": {
-              "type": "number",
-              "format": "double",
-              "description": "Transaction amount",
-              "example": 4000.0
-            },
-            "fixedCharge": {
-              "type": "number",
-              "format": "double",
-              "description": "Fixed charge",
-              "example": 0.0
-            },
-            "source": {
-              "type": "string",
-              "description": "Transaction source",
-              "example": "pos"
-            },
-            "type": {
-              "type": "string",
-              "description": "Transaction type",
-              "example": "withdrawal"
-            },
-            "gatewayMessage": {
-              "type": "string",
-              "description": "Gateway message",
-              "example": "Insufficient funds"
-            },
-            "customerBillerId": {
-              "type": "string",
-              "description": "Customer biller ID",
-              "example": "539983 **** **** 5118"
-            },
-            "timeCreated": {
-              "type": "string",
-              "format": "date-time",
-              "description": "Creation timestamp",
-              "example": "2023-09-08T19:26:34.657000Z"
-            },
-            "posTid": {
-              "type": "string",
-              "description": "POS terminal ID",
-              "example": "2KUD4AKB"
-            },
-            "terminalId": {
-              "type": "string",
-              "description": "Terminal ID",
-              "example": "2KUD4AKB"
-            },
-            "providerTerminalId": {
-              "type": "string",
-              "description": "Provider terminal ID",
-              "example": "2KUD4AKB"
-            },
-            "rrn": {
-              "type": "string",
-              "description": "RRN (Retrieval Reference Number)",
-              "example": "230908202632"
-            },
-            "posSerialNumber": {
-              "type": "string",
-              "description": "POS serial number",
-              "example": "91230309116826"
-            },
-            "posTerminalLabel": {
-              "type": "string",
-              "description": "POS terminal label",
-              "example": "KEB MUSA ABUBAKAR"
-            },
-            "stan": {
-              "type": "string",
-              "description": "STAN (System Trace Audit Number)",
-              "example": "556734"
-            },
-            "paymentVendorReference": {
-              "type": "string",
-              "description": "Payment vendor reference",
-              "example": "2KUD4AKB230908202632"
-            },
-            "userId": {
-              "type": "string",
-              "description": "User ID",
-              "example": "dfc05ca1-4e75-41dd-8e41-2d362d565893"
-            },
-            "posRrn": {
-              "type": "string",
-              "description": "POS RRN (Retrieval Reference Number)",
-              "example": "230908202632"
-            },
-            "merchantTxRef": {
-              "type": "string",
-              "description": "Merchant transaction reference",
-              "example": "c90d-4b25-ad0f"
-            }
-          },
-          "required": [
-            "id",
-            "status",
-            "amount",
-            "source",
-            "type",
-            "gatewayMessage",
-            "timeCreated"
-          ]
-        },
-        "TransactionListResults": {
-          "type": "object",
-          "properties": {
-            "results": {
-              "type": "array",
-              "description": "Contains list of transactions",
-              "items": {
-                "$ref": "#/components/schemas/TransactionResult"
-              }
-            },
-            "cursor": {
-              "type": "string",
-              "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
-              "example": "xchbaVFsjdsbaADddd"
+        }
+      },
+      "CreateOrderRequest": {
+        "type": "object",
+        "description": "The Checkout request object",
+        "properties": {
+          "order": {
+            "type": "object",
+            "description": "Order object",
+            "items": {
+              "$ref": "#/components/schemas/Order"
             }
           }
         }
       },
-      "securitySchemes": {
-        "BearerAuth": {
-          "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`. For example: `Authorization: {ACCESS_TOKEN}`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
-          "scheme": "bearer",
-          "type": "http",
-          "bearerFormat": "JWT"
+      "BankAccountTransferMetaObject": {
+        "type": "object",
+        "properties": {
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Merchant transaction reference",
+            "example": "3JVW2xJCjj443oannREBuTaXDdji"
+          },
+          "api_client_id": {
+            "type": "string",
+            "description": "API client ID",
+            "example": "6a7bed88-7c93-4a1c-a445-f88edbca6489"
+          },
+          "api_account_id": {
+            "type": "string",
+            "description": "API account ID",
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "rrn": {
+            "type": "string",
+            "description": "RRN (Retrieval Reference Number)",
+            "example": "230908151711"
+          }
+        },
+        "description": "Transaction meta data"
+      },
+      "BankAccountTransferRequest": {
+        "type": "object",
+        "description": "A structure representing an object required to post a bank account transfer.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "The amount to be transferred.",
+            "example": 3500
+          },
+          "accountNumber": {
+            "type": "string",
+            "description": "The destination bank account number.",
+            "example": "0554772814",
+            "maxLength": 10,
+            "minLength": 10
+          },
+          "accountName": {
+            "type": "string",
+            "description": "The name on the account.",
+            "example": "M.A Animashaun"
+          },
+          "bankCode": {
+            "type": "string",
+            "description": "The code of the recipient bank.",
+            "example": "058"
+          },
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Unique reference used to track a transaction from an external process.",
+            "example": "UNQ_123abGGhh5546"
+          },
+          "senderName": {
+            "type": "string",
+            "description": "Sender name",
+            "example": "Nightly Post"
+          },
+          "pin": {
+            "type": "string",
+            "description": "PIN",
+            "example": "2222"
+          }
+        },
+        "required": [
+          "amount",
+          "accountNumber",
+          "bankCode",
+          "accountName",
+          "merchantTxRef",
+          "senderName",
+          "pin"
+        ]
+      },
+      "BankAccountTransferResult": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Transfer amount",
+            "example": 5502.0
+          },
+          "meta": {
+            "$ref": "#/components/schemas/BankAccountTransferMetaObject"
+          },
+          "fee": {
+            "type": "number",
+            "format": "double",
+            "description": "Transfer fee",
+            "example": 50.0
+          },
+          "timeCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2023-09-08T14:17:13.634Z"
+          },
+          "id": {
+            "type": "string",
+            "description": "Transfer ID",
+            "example": "API-TRANSFER-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transfer type",
+            "example": "transfer"
+          },
+          "status": {
+            "type": "string",
+            "description": "Transfer status",
+            "example": "SUCCESS"
+          }
+        },
+        "required": [
+          "amount",
+          "meta",
+          "fee",
+          "timeCreated",
+          "id",
+          "type",
+          "status"
+        ],
+        "description": "Transfer data"
+      },
+      "BankAccountLookupRequest": {
+        "type": "object",
+        "description": "A structure representing a bank account lookup request",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "The account number to be looked up.",
+            "example": "0554772814",
+            "maxLength": 10,
+            "minLength": 10
+          },
+          "bankCode": {
+            "type": "string",
+            "description": "The bankCode of the bank the account number belongs to. This can be obtained from a call to `/v1/transfers/bank` ",
+            "example": "053"
+          }
+        },
+        "required": [
+          "accountNumber",
+          "bankCode"
+        ]
+      },
+      "BankAccountLookupResult": {
+        "type": "object",
+        "description": "A structure representing a bank account lookup result",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "The account number already looked up.",
+            "example": "0554772814",
+            "maxLength": 10,
+            "minLength": 10
+          },
+          "accountName": {
+            "type": "string",
+            "description": "The name on the account.",
+            "example": "M.A Animashaun"
+          }
         }
+      },
+      "Banks": {
+        "type": "object",
+        "description": "A structure representing a bank",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "The bank's code.",
+            "example": "056",
+            "maxLength": 6,
+            "minLength": 3
+          },
+          "name": {
+            "type": "string",
+            "description": "The bank's name.",
+            "example": "GTB"
+          }
+        }
+      },
+      "BanksListResults": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Contains result of all banks fetched",
+            "items": {
+              "$ref": "#/components/schemas/Banks"
+            }
+          }
+        }
+      },
+      "CreateAccountRequest": {
+        "type": "object",
+        "properties": {
+          "accountRef": {
+            "type": "string",
+            "description": "Account reference",
+            "minLength": 16,
+            "maxLength": 64,
+            "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number",
+            "minLength": 11,
+            "maxLength": 15,
+            "example": "2348188667581"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "format": "email",
+            "example": "ifeol-subaccount@exmple.com"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "Bank Verification Number (BVN)",
+            "minLength": 11,
+            "maxLength": 11,
+            "example": "12234412345"
+          },
+          "pin": {
+            "type": "string",
+            "description": "Personal Identification Number (PIN)",
+            "minLength": 4,
+            "maxLength": 4,
+            "example": "1234"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account holder's name",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Daniel Scorsese"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "minLength": 3,
+            "maxLength": 3,
+            "example": "NGN"
+          }
+        },
+        "required": ["accountRef", "phoneNumber", "email", "bvn", "pin", "accountName", "currency"]
+      },
+      "CreateAccountResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp",
+            "format": "date-time",
+            "example": "2023-09-04T07:09:06.900Z"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "fc81b80e-e607-4b86-8591-840925191733"
+          },
+          "accountHolderId": {
+            "type": "string",
+            "description": "Account holder ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "accountRef": {
+            "type": "string",
+            "description": "Account reference",
+            "minLength": 16,
+            "maxLength": 64,
+            "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "Phone number",
+            "minLength": 11,
+            "maxLength": 15,
+            "example": "2348188667581"
+          },
+          "email": {
+            "type": "string",
+            "description": "Email address",
+            "format": "email",
+            "example": "ifeol-subaccount-4@exmple.com"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "Bank Verification Number (BVN)",
+            "minLength": 11,
+            "maxLength": 11,
+            "example": "12234412345"
+          },
+          "status": {
+            "type": "string",
+            "description": "Account status",
+            "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "PND", "BLACKLISTED"],
+            "example": "ACTIVE"
+          },
+          "type": {
+            "type": "string",
+            "description": "Account type",
+            "enum": ["virtual", "outlet"],
+            "example": "virtual"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account holder's name",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Daniel Scorsese"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "minLength": 3,
+            "maxLength": 3,
+            "example": "NGN"
+          }
+        },
+        "required": ["createdAt", "accountId", "accountHolderId", "accountRef", "phoneNumber", "email", "bvn", "status", "type", "accountName", "currency"]
+      },
+      "RateLimitError": {
+        "type": "object",
+        "description": "Rate-limit error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "429"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Too many requests"
+          }
+        }
+      },
+      "AuthenticationError": {
+        "type": "object",
+        "description": "Authentication Error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "401"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Unauthorized"
+          }
+        }
+      },
+      "AuthorizationError": {
+        "type": "object",
+        "description": "Permissions error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "403"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Forbidden"
+          }
+        }
+      },
+      "RecordNotFoundError": {
+        "type": "object",
+        "description": "Record-Not-Found error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "404"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Record not found"
+          }
+        }
+      },
+      "RequestError": {
+        "type": "object",
+        "description": "Request Error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "400"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Request failed."
+          }
+        }
+      },
+      "ServerError": {
+        "type": "object",
+        "description": "Server error response.",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "API error code.",
+            "example": "500"
+          },
+          "description": {
+            "type": "string",
+            "description": "Additional details about the error.",
+            "example": "Server error"
+          }
+        }
+      },
+      "IssueTokenRequest": {
+        "type": "object",
+        "description": "A structure representing an authentication request.",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "description": "The grant type of the authentication.",
+            "enum": [
+              "client_credentials",
+              "refresh_token"
+            ],
+            "example": "client_credentials"
+          },
+          "client_id": {
+            "type": "string",
+            "description": "The client's id as obtained from your Nomba dashboard.",
+            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
+            "maxLength": 36,
+            "minLength": 36
+          },
+          "client_secret": {
+            "type": "string",
+            "description": "The client's secret as obtained from your Nomba dashboard. It is securely generated by the Nomba system",
+            "example": "JFJ8yq3G4+DvjivJMsji0YkZBkkKdSdjifR+TgT9RLM=",
+            "maxLength": 44,
+            "minLength": 44
+          }
+        },
+        "required": [
+          "grant_type",
+          "client_id",
+          "client_secret"
+        ]
+      },
+      "IssueTokenResponse": {
+        "type": "object",
+        "description": "A structure representing an authentication result.",
+        "properties": {
+          "businessId": {
+            "type": "string",
+            "description": "The accountId of the merchant/business that is connecting to the Nomba system via API",
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "access_token": {
+            "type": "string",
+            "description": "A JWT (Json Web Token) token used to grant access to resources on the Nomba API.",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJHOjhmYWM4M2FjLTc2YjAtNDM1Zi1hYTM1LThkOTU3ZGQ5MjdkZCI6Ikc6OGZhYzgzYWMtNzZiMC00MzVmLWFhMzUtOGQ5NTdkZDkyN2RkIiwiUjpURUFNU19PV05FUiI6IlI6VEVBTVNfT1dORVIiLCJFbWFpbDp2aWN0b3JzaG9hZ2FAZ21haWwuY29tIjoiRW1haWw6dmljdG9yc2hvYWdhQGdtYWlsLmNvbSIsImlhdCI6MTY4MTkxODU3OSwic3ViIjoiNWUyNmNmYjAtNTI5Zi00MTdiLWI4ZDItYWJjNDcxZjRjOWRiIiwiZXhwIjoxNjgxOTIyMTc5fQ.lQOsyhR1gajKdzE9IHQEtxhQyUrArctEDZiP9pWVTFY",
+            "maxLength": 600,
+            "minLength": 300
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "A Base64 Encoded String used to refresh an expired access_token",
+            "example": "01h4gdx2tctxfjgacbdwrcvs5d1688473602892",
+            "maxLength": 60,
+            "minLength": 30
+          },
+          "expiresAt": {
+            "type": "string",
+            "description": "The date and time this entity was created. This value uses Coordinated Universal Time (UTC) and ISO 8601 format – `YYYY-MM-DDThh:mm:ssZ`.",
+            "example": "2022-07-08T14:33:00Z"
+          }
+        },
+        "required": [
+          "businessId",
+          "access_token",
+          "refresh_token",
+          "expiresAt"
+        ]
+      },
+      "RefreshTokenRequest": {
+        "type": "object",
+        "description": "A structure representing a refresh token request.",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "description": "The grant type of the authentication.",
+            "enum": [
+              "client_credentials",
+              "refresh_token"
+            ],
+            "example": "refresh_token"
+          },
+          "refresh_token": {
+            "type": "string",
+            "description": "A Base64 Encoded String used to refresh an expired access_token",
+            "example": "01h4gdx2tctxfjgacbdwrcvs5d1688473602892",
+            "maxLength": 60,
+            "minLength": 30
+          }
+        },
+        "required": [
+          "grant_type",
+          "refresh_token"
+        ]
+      },
+      "RevokeTokenRequest": {
+        "type": "object",
+        "description": "A structure representing a request to revoke a token.",
+        "properties": {
+          "clientId": {
+            "type": "string",
+            "description": "The client's id as obtained from your Nomba dashboard.",
+            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
+            "maxLength": 36,
+            "minLength": 36
+          },
+          "access_token": {
+            "type": "string",
+            "description": "The JWT (Json Web Token) token to be revoked",
+            "example": "eyJhbGciOiJIUzI1NiJ9.eyJHOjhmYWM4M2FjLTc2YjAtNDM1Zi1hYTM1LThkOTU3ZGQ5MjdkZCI6Ikc6OGZhYzgzYWMtNzZiMC00MzVmLWFhMzUtOGQ5NTdkZDkyN2RkIiwiUjpURUFNU19PV05FUiI6IlI6VEVBTVNfT1dORVIiLCJFbWFpbDp2aWN0b3JzaG9hZ2FAZ21haWwuY29tIjoiRW1haWw6dmljdG9yc2hvYWdhQGdtYWlsLmNvbSIsImlhdCI6MTY4MTkxODU3OSwic3ViIjoiNWUyNmNmYjAtNTI5Zi00MTdiLWI4ZDItYWJjNDcxZjRjOWRiIiwiZXhwIjoxNjgxOTIyMTc5fQ.lQOsyhR1gajKdzE9IHQEtxhQyUrArctEDZiP9pWVTFY",
+            "maxLength": 600,
+            "minLength": 300
+          }
+        },
+        "required": [
+          "clientId",
+          "access_token"
+        ]
+      },
+      "RevokeTokenResponse": {
+        "type": "object",
+        "description": "A structure representing a response from an attempt to revoke a token",
+        "properties": {
+          "code": {
+            "type": "string",
+            "description": "Tells if the access_token has been revoked",
+            "example": "00"
+          },
+          "description": {
+            "type": "string",
+            "description": "Describes the result of the action performed",
+            "example": "Token revoked successfully"
+          }
+        }
+      },
+      "AccountDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp",
+            "format": "date-time",
+            "example": "2023-09-04T07:09:06.900Z"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "fc81b80e-e607-4b86-8591-840925191733"
+          },
+          "accountHolderId": {
+            "type": "string",
+            "description": "Account holder ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "accountRef": {
+            "type": "string",
+            "description": "Account reference",
+            "minLength": 16,
+            "maxLength": 64,
+            "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "Bank Verification Number (BVN)",
+            "minLength": 11,
+            "maxLength": 11,
+            "example": "12234412345"
+          },
+          "status": {
+            "type": "string",
+            "description": "Account status",
+            "enum": ["ACTIVE", "INACTIVE", "SUSPENDED", "PND", "BLACKLISTED"],
+            "example": "ACTIVE"
+          },
+          "type": {
+            "type": "string",
+            "description": "Account type",
+            "enum": ["virtual", "outlet"],
+            "example": "virtual"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account holder's name",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Daniel Scorsese"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "minLength": 3,
+            "maxLength": 3,
+            "example": "NGN"
+          },
+          "banks": {
+            "type": "array",
+            "description": "List of associated bank accounts",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bankAccountNumber": {
+                  "type": "string",
+                  "description": "Bank account number",
+                  "example": "93910"
+                },
+                "bankName": {
+                  "type": "string",
+                  "description": "Bank name",
+                  "example": "Sterling Bank"
+                },
+                "bankAccountName": {
+                  "type": "string",
+                  "description": "Bank account holder name",
+                  "example": "Nomba/Ifeoluwa Adeboye"
+                }
+              },
+              "required": ["bankAccountNumber", "bankName", "bankAccountName"]
+            }
+          }
+        },
+        "required": ["createdAt", "accountId", "accountHolderId", "accountRef", "bvn", "status", "type", "accountName", "banks", "currency"]
+      },
+      "AccountBalanceResponse": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "string",
+            "description": "Account balance",
+            "example": "281946.0"
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 3,
+            "maxLength": 3,
+            "description": "Currency code",
+            "example": "NGN"
+          },
+          "timeCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Account creation timestamp",
+            "example": "2023-08-30T14:56:59.000Z"
+          }
+        },
+        "required": ["amount", "currency", "timeCreated"]
+      },
+      "TerminalAssignmentRequest": {
+        "type": "object",
+        "properties": {
+          "serialNumber": {
+            "type": "string",
+            "description": "Serial number",
+            "example": "55555555"
+          },
+          "terminalLabel": {
+            "type": "string",
+            "description": "Terminal label",
+            "example": "Testing"
+          }
+        },
+        "required": ["serialNumber"]
+      },
+      "TerminalResult": {
+        "type": "object",
+        "properties": {
+          "terminalId": {
+            "type": "string",
+            "description": "Terminal ID",
+            "example": "201124LM"
+          },
+          "serialNumber": {
+            "type": "string",
+            "description": "Serial number",
+            "example": "55555555"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account ID",
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "parentAccountId": {
+            "type": "string",
+            "description": "Parent account ID",
+            "example": ""
+          },
+          "merchantName": {
+            "type": "string",
+            "description": "Merchant name",
+            "example": "trident and rees"
+          },
+          "terminalLabel": {
+            "type": "string",
+            "description": "Terminal label",
+            "example": "Testing"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2020-09-23T10:21:48.789Z"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Update timestamp",
+            "example": "2023-09-04T15:23:55.173Z"
+          }
+        },
+        "required": ["terminalId", "serialNumber", "accountId", "parentAccountId", "merchantName", "terminalLabel", "createdAt", "updatedAt"]
+      },
+      "TerminalListResults": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Contains list of terminals",
+            "items": {
+              "$ref": "#/components/schemas/TerminalResult"
+            }
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
+            "example": "xchbaVFsjdsbaADddd"
+          }
+        }
+      },
+      "WalletTransferMetaObject": {
+        "type": "object",
+        "properties": {
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Merchant transaction reference",
+            "example": "3JVW2xJCjj443oannREBuTaXDdji"
+          },
+          "api_client_id": {
+            "type": "string",
+            "description": "API client ID",
+            "example": "6a7bed88-7c93-4a1c-a445-f88edbca6489"
+          },
+          "api_account_id": {
+            "type": "string",
+            "description": "API account ID",
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "rrn": {
+            "type": "string",
+            "description": "RRN (Retrieval Reference Number)",
+            "example": "230908151711"
+          }
+        },
+        "description": "Transaction meta data"
+      },
+      "WalletTransferRequest": {
+        "type": "object",
+        "description": "A structure representing an object required to post a wallet transfer.",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "The amount to be transferred.",
+            "example": 3500
+          },
+          "receiverAccountId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "The receiver's accountId.",
+            "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+          },
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Unique reference used to track a transaction from an external process.",
+            "example": "UNQ_123abGGhh5546"
+          },
+          "pin": {
+            "type": "string",
+            "description": "PIN",
+            "example": "2222"
+          }
+        },
+        "required": [
+          "amount",
+          "accountNumber",
+          "bankCode",
+          "accountName",
+          "merchantTxRef",
+          "senderName",
+          "pin"
+        ]
+      },
+      "WalletTransferResult": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Transfer amount",
+            "example": 5502.0
+          },
+          "meta": {
+            "$ref": "#/components/schemas/WalletTransferMetaObject"
+          },
+          "fee": {
+            "type": "number",
+            "format": "double",
+            "description": "Transfer fee",
+            "example": 50.0
+          },
+          "timeCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2023-09-08T14:17:13.634Z"
+          },
+          "id": {
+            "type": "string",
+            "description": "Transfer ID",
+            "example": "API-TRANSFER-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transfer type",
+            "example": "transfer"
+          },
+          "status": {
+            "type": "string",
+            "description": "Transfer status",
+            "example": "SUCCESS"
+          }
+        },
+        "required": [
+          "amount",
+          "meta",
+          "fee",
+          "timeCreated",
+          "id",
+          "type",
+          "status"
+        ],
+        "description": "Transfer data"
+      },
+      "BankTransactionMetaObject": {
+        "type": "object",
+        "properties": {
+          "billerId": {
+            "type": "string",
+            "description": "Biller ID",
+            "example": "API_FCIR5UQFMYS"
+          },
+          "terminalActionId": {
+            "type": "string",
+            "description": "Terminal action ID",
+            "example": ""
+          },
+          "productId": {
+            "type": "string",
+            "description": "Product ID",
+            "example": "p2p"
+          },
+          "fee": {
+            "type": "number",
+            "format": "double",
+            "description": "Fee",
+            "example": 0.0
+          },
+          "type": {
+            "type": "string",
+            "description": "Type",
+            "example": "p2p"
+          },
+          "transactionId": {
+            "type": "string",
+            "description": "Transaction ID",
+            "example": "API-P2P-84026-d8a4d658-6747-418d-a7e2-37bc6290310d"
+          },
+          "rrn": {
+            "type": "string",
+            "description": "RRN (Retrieval Reference Number)",
+            "example": ""
+          },
+          "parentAccountId": {
+            "type": "string",
+            "description": "Parent account ID",
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "terminalLabel": {
+            "type": "string",
+            "description": "Terminal label",
+            "example": ""
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account ID",
+            "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+          },
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Merchant transaction reference",
+            "example": ""
+          },
+          "transactionAmount": {
+            "type": "number",
+            "format": "double",
+            "description": "Transaction amount",
+            "example": 7000.0
+          },
+          "mCollectionsId": {
+            "type": "string",
+            "description": "MCollections ID",
+            "example": ""
+          }
+        }
+      },
+      "BankTransactionResult": {
+        "type": "object",
+        "properties": {
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount",
+            "example": 7000.0
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency",
+            "example": "NGN"
+          },
+          "meta": {
+            "$ref": "#/components/schemas/BankTransactionMetaObject"
+          },
+          "status": {
+            "type": "string",
+            "description": "Status",
+            "example": "SUCCESS"
+          },
+          "timeUpdated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Update timestamp",
+            "example": "2023-09-08T19:05:21.000Z"
+          },
+          "walletBalance": {
+            "type": "number",
+            "format": "double",
+            "description": "Wallet balance",
+            "example": 285951.0
+          },
+          "transactionType": {
+            "type": "string",
+            "description": "Transaction type",
+            "example": "DEBIT"
+          }
+        },
+        "required": ["amount", "currency", "meta", "status", "timeUpdated", "walletBalance", "transactionType"]
+      },
+      "BankTransactionListResults": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Contains list of credit/debit transactions",
+            "items": {
+              "$ref": "#/components/schemas/BankTransactionResult"
+            }
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
+            "example": "xchbaVFsjdsbaADddd"
+          }
+        }
+      },
+      "FilterTransactionRequest": {
+        "type": "object",
+        "properties": {
+          "transactionRef": {
+            "type": "string",
+            "description": "Transaction ID/Reference",
+            "example": "POS-WITHDRAW-DFC05-693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea"
+          },
+          "status": {
+            "type": "string",
+            "description": "Transaction status",
+            "example": "SUCCESS"
+          },
+          "source": {
+            "type": "string",
+            "description": "Transaction source",
+            "example": "pos"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transaction type",
+            "example": "withdrawal"
+          },
+          "terminalId": {
+            "type": "string",
+            "description": "Terminal ID",
+            "example": "2KUD4AKB"
+          },
+          "rrn": {
+            "type": "string",
+            "description": "RRN (Retrieval Reference Number)",
+            "example": "230908202632"
+          },
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Merchant transaction reference",
+            "example": "c90d-4b25-ad0f"
+          }
+        }
+      },
+      "TransactionResult": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Transaction ID",
+            "example": "POS-WITHDRAW-DFC05-693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea"
+          },
+          "status": {
+            "type": "string",
+            "description": "Transaction status",
+            "example": "PAYMENT_FAILED"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Transaction amount",
+            "example": 4000.0
+          },
+          "fixedCharge": {
+            "type": "number",
+            "format": "double",
+            "description": "Fixed charge",
+            "example": 0.0
+          },
+          "source": {
+            "type": "string",
+            "description": "Transaction source",
+            "example": "pos"
+          },
+          "type": {
+            "type": "string",
+            "description": "Transaction type",
+            "example": "withdrawal"
+          },
+          "gatewayMessage": {
+            "type": "string",
+            "description": "Gateway message",
+            "example": "Insufficient funds"
+          },
+          "customerBillerId": {
+            "type": "string",
+            "description": "Customer biller ID",
+            "example": "539983 **** **** 5118"
+          },
+          "timeCreated": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Creation timestamp",
+            "example": "2023-09-08T19:26:34.657000Z"
+          },
+          "posTid": {
+            "type": "string",
+            "description": "POS terminal ID",
+            "example": "2KUD4AKB"
+          },
+          "terminalId": {
+            "type": "string",
+            "description": "Terminal ID",
+            "example": "2KUD4AKB"
+          },
+          "providerTerminalId": {
+            "type": "string",
+            "description": "Provider terminal ID",
+            "example": "2KUD4AKB"
+          },
+          "rrn": {
+            "type": "string",
+            "description": "RRN (Retrieval Reference Number)",
+            "example": "230908202632"
+          },
+          "posSerialNumber": {
+            "type": "string",
+            "description": "POS serial number",
+            "example": "91230309116826"
+          },
+          "posTerminalLabel": {
+            "type": "string",
+            "description": "POS terminal label",
+            "example": "KEB MUSA ABUBAKAR"
+          },
+          "stan": {
+            "type": "string",
+            "description": "STAN (System Trace Audit Number)",
+            "example": "556734"
+          },
+          "paymentVendorReference": {
+            "type": "string",
+            "description": "Payment vendor reference",
+            "example": "2KUD4AKB230908202632"
+          },
+          "userId": {
+            "type": "string",
+            "description": "User ID",
+            "example": "dfc05ca1-4e75-41dd-8e41-2d362d565893"
+          },
+          "posRrn": {
+            "type": "string",
+            "description": "POS RRN (Retrieval Reference Number)",
+            "example": "230908202632"
+          },
+          "merchantTxRef": {
+            "type": "string",
+            "description": "Merchant transaction reference",
+            "example": "c90d-4b25-ad0f"
+          }
+        },
+        "required": ["id", "status", "amount", "source", "type", "gatewayMessage", "timeCreated"]
+      },
+      "TransactionListResults": {
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "description": "Contains list of transactions",
+            "items": {
+              "$ref": "#/components/schemas/TransactionResult"
+            }
+          },
+          "cursor": {
+            "type": "string",
+            "description": "Cursor for pagination. It will be empty if there is no more page to scroll to",
+            "example": "xchbaVFsjdsbaADddd"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`. For example: `Authorization: {ACCESS_TOKEN}`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
+        "scheme": "bearer",
+        "type": "http",
+        "bearerFormat": "JWT"
       }
     }
   }
+}
