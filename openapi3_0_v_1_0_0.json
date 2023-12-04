@@ -5445,8 +5445,11 @@
             "description": "token key",
             "example": "5844858382"
           }
-        }
-      },
+        },
+        "required": [
+          "tokenKey"
+        ]
+    },
       "DeleteTokenizedCardDataResponse": {
         "type": "object",
         "properties": {
@@ -5486,7 +5489,6 @@
           "currentEmailAddress",
           "newEmailAddress"
         ]
-
       },
       "UpdateTokenizedCardDataResponse": {
         "type": "object",
@@ -5598,7 +5600,10 @@
             "description": "the token key returned in the webhook",
             "example": "7628788443"
           }
-        }
+        },
+        "required": [
+          "tokenKey"
+        ]
       },
       "TokenizedCardPaymentResponse": {
         "type": "object",
