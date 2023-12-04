@@ -4768,6 +4768,19 @@
           }
         ],
         "summary": "Create an online checkout order.",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
         "tags": [
           "Online Checkout"
         ]
@@ -4909,14 +4922,592 @@
           }
         ],
         "summary": "charge a customer using Tokenized card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
         "tags": [
           "Online Checkout"
         ]
       }
-    }
+    },
+    "/v1/checkout/tokenized-card-data": {
+      "get": {
+        "description": "Fetch list of merchant's tokenized cards",
+        "operationId": "List all tokenized cards for merchant",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          },
+          {
+            "description": "Merchant's email address",
+            "example": "abcde@gmail.com",
+            "in": "query",
+            "name": "customerEmail",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Start date, based on the date the token was created",
+            "example": "2023-08-08T23:59:59",
+            "in": "query",
+            "name": "startDate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "end date, based on the date the token was created",
+            "example": "2023-08-08T23:59:59",
+            "in": "query",
+            "name": "endDate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Specifies the page number to start retriving data from. For first request, this can be ommited or set to 0",
+            "example": 0,
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                      "code": {
+                        "type": "string",
+                        "example": "00",
+                        "description": "Response Code"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Success",
+                        "description": "response description"
+                      },
+                      "data": {
+                        "type": "object",
+                        "properties":{
+                          "nextPage": {
+                          "type": "string",
+                          "format": "int32",
+                          "description": "The value of the next page for data retrieval. This value is zero if there are no more pages to retrieve",
+                          "example": "2"
+                          },
+                          "tokenizedCardDataList": {
+                            "type": "array",
+                            "description": "Contains all tokenized card data meeting the search criteria",
+                            "items": {
+                              "$ref": 
+                              "#/components/schemas/TokenizedCardData"
+                            }
+                          }
+                        }
+                      }
+                  }
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List Tokenized cards",
+        "tags": [
+          "Online Checkout"
+        ]
+      },
+      "post": {
+        "description": "Update a tokenized card details",
+        "operationId": "Update tokenized card data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTokenizedCardDataRequest"
+              }
+            }
+          },
+          "description": "The request payload required to upate the tokenized card data",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateTokenizedCardDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "Data update successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update tokenzied card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      },
+      "delete": {
+        "description": "Delete a tokenized card details",
+        "operationId": "Delete tokenized card data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTokenizedCardDataRequest"
+              }
+            }
+          },
+          "description": "The request payload required to upate the tokenized card data",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/DeleteTokenizedCardDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "Data update successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update tokenzied card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      }    }
   },
   "components": {
     "schemas": {
+      "DeleteTokenizedCardDataRequest": {
+        "type": "object",
+        "properties": {
+          "tokenKey": {
+            "type": "string",
+            "description": "token key",
+            "example": "5844858382"
+          }
+        }
+      },
+      "DeleteTokenizedCardDataResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "status",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message",
+            "example": "success"
+          }
+        }
+      },
+      "UpdateTokenizedCardDataRequest": {
+        "type": "object",
+        "properties": {
+          "tokenKey": {
+            "type": "string",
+            "description": "token key",
+            "example": "5844858382"
+          },
+          "currentEmailAddress": {
+            "type": "string",
+            "description": "customer email currently associated with the key",
+            "example": "email@email.com"
+          },
+          "newEmailAddress": {
+            "type": "string",
+            "description": "new email to replace the old one",
+            "example": "email@email.com"
+          }
+        },
+        "required": [
+          "tokenKey",
+          "currentEmailAddress",
+          "newEmailAddress"
+        ]
+
+      },
+      "UpdateTokenizedCardDataResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "status",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "customer email currently associated with the key",
+            "example": "email@email.com"
+          },
+          "tokenizedCardData": {
+            "items":{
+              "$ref": "#/components/schemas/TokenizedCardData"
+            }
+          }
+        }
+      },
       "CreateOrderResponse": {
         "type": "object",
         "properties": {
@@ -4947,7 +5538,7 @@
           "customerId": {
             "type": "string",
             "description": "customer id",
-            "example": "762878"
+            "example": "762878332454"
           },
           "callbackUrl": {
             "type": "string",
@@ -4960,9 +5551,10 @@
             "example": "abcde@gmail.com"
           },
           "amount": {
-            "type": "integer",
+            "type": "number",
+            "format": "double",
             "description": "Amount to pay",
-            "example": "7689007667"
+            "example": "10000.00"
           },
           "currency": {
             "type": "string",
@@ -4982,11 +5574,7 @@
         "description": "The Checkout request object",
         "properties": {
           "order": {
-            "type": "object",
-            "description": "Order object",
-            "items": {
               "$ref": "#/components/schemas/Order"
-            }
           },
           "tokenizeCard": {
             "type": "boolean",
@@ -5003,11 +5591,7 @@
         "description": "The Tokenized card payment request object",
         "properties": {
           "order": {
-            "type": "object",
-            "description": "Order object",
-            "items": {
-              "$ref": "#/components/schemas/Order"
-            }
+            "$ref": "#/components/schemas/Order"
           },
           "tokenKey": {
             "type": "string",
@@ -5028,6 +5612,36 @@
             "type": "string",
             "description": "some details of the transaction response.",
             "example": "success"
+          }
+        }
+      },
+      "TokenizedCardData": {
+        "type": "object",
+        "properties": {
+          "tokenKey": {
+            "type": "string",
+            "description": "the key associated with the tokenzied card",
+            "example": "e890bd1a9f0d"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "customer email",
+            "example": "email@email.com"
+          },
+          "cardType": {
+            "type": "string",
+            "description": "Unique reference used to track an account from an external process. Would be auto-generated if not provided at the point of creation.",
+            "example": "Verve"
+          },
+          "cardPan": {
+            "type": "string",
+            "description": "Card pan",
+            "example": "234818********7580"
+          },
+          "tokenExpirationDate": {
+            "type": "string",
+            "description": "token expiration date",
+            "example": "20/20"
           }
         }
       },
