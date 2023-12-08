@@ -5552,9 +5552,9 @@
             "description": "customer id",
             "example": "762878332454"
           },
-          "outletId": {
+          "accountId": {
             "type": "string",
-            "description": "Id of the Outlet whose wallet will be credited for this order. If ignored, the main wallet will be used.",
+            "description": "the Id of the account whose wallet will be credited for this order. If ignored, the main account wallet will be used.",
             "example": "762878332454"
           },
           "callbackUrl": {
