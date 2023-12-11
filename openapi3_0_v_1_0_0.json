@@ -5513,6 +5513,16 @@
       "CreateOrderResponse": {
         "type": "object",
         "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "The response status, true if successful",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response description",
+            "example": "success"
+          },
           "checkoutLink": {
             "type": "string",
             "description": "Payment checkout link",
@@ -5525,8 +5535,8 @@
           }
         },
         "required": [
-          "checkoutLink",
-          "orderReference"
+          "success",
+          "message"
         ]
       },
       "Order": {
@@ -5540,6 +5550,11 @@
           "customerId": {
             "type": "string",
             "description": "customer id",
+            "example": "762878332454"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "the Id of the account whose wallet will be credited for this order. If ignored, the main account wallet will be used.",
             "example": "762878332454"
           },
           "callbackUrl": {
