@@ -5264,7 +5264,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Update tokenzied card data",
+        "summary": "Update tokenized card data",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -5416,7 +5416,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Update tokenzied card data",
+        "summary": "Delete tokenzied card data",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
