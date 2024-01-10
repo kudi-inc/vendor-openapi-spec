@@ -886,6 +886,160 @@
         ]
       }
     },
+    "/v1/accounts/virtual": {
+      "post": {
+        "description": "You can use this endpoint to create a virtual account that is part of your business.",
+        "operationId": "Create virtual account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateVirtualAccountRequest"
+              }
+            }
+          },
+          "description": "The request payload required to create an account",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CreateVirtualAccountResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "Account creation successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Create virtual account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
     "/v1/accounts/{accountId}": {
       "get": {
         "description": "You can use this endpoint to get details of a single account.",
@@ -1808,7 +1962,7 @@
             "required": true
           },
           {
-            "description": "The accountId whose terminals are to be fetched.",
+            "description": "The accountId whose transactions are to be fetched.",
             "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
             "in": "path",
             "name": "accountId",
@@ -2212,7 +2366,7 @@
     "/v1/terminals/assign/{accountId}": {
       "post": {
         "description": "You can use this endpoint to assign a terminal to an account.",
-        "operationId": "Assign terminal to an account",
+        "operationId": "Assign a terminal to an account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -2344,7 +2498,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Assign terminal to an account",
+        "summary": "Assign a terminal to an account",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -2366,6 +2520,160 @@
             "schema": {
               "type": "string"
             }
+          }
+        ],
+        "tags": [
+          "Terminals"
+        ]
+      }
+    },
+    "/v1/terminals/assign": {
+      "post": {
+        "description": "You can use this endpoint to assign a terminal to the parent account.",
+        "operationId": "Assign a terminal to the parent account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to assign a terminal to an account.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Assign a terminal to the parent account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
           }
         ],
         "tags": [
@@ -2537,10 +2845,164 @@
         ]
       }
     },
+    "/v1/terminals/unassign": {
+      "post": {
+        "description": "You can use this endpoint to un-assign a terminal from the parent account.",
+        "operationId": "Un-assign a terminal from the parent account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to un-assign a terminal from an account",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Un-assign a terminal from the parent account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Terminals"
+        ]
+      }
+    },
     "/v1/transfers/banks": {
       "get": {
         "description": "You can use this endpoint to fetch all banks, their names and codes.",
-        "operationId": "Fetch bank codes and names.",
+        "operationId": "Fetch bank codes and names",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -2847,7 +3309,7 @@
     "/v1/transfers/bank": {
       "post": {
         "description": "You can use this endpoint to perform bank account transfer.",
-        "operationId": "Perform bank account transfer the parent account.",
+        "operationId": "Perform bank account transfer the parent account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3001,7 +3463,7 @@
     "/v1/transfers/bank/{accountId}": {
       "post": {
         "description": "You can use this endpoint to perform bank account transfer.",
-        "operationId": "Perform bank account transfer from account.",
+        "operationId": "Perform bank account transfer from account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3165,7 +3627,7 @@
     "/v1/transfers/wallet": {
       "post": {
         "description": "You can use this endpoint to perform a wallet transfer.",
-        "operationId": "Perform wallet transfer from the parent account.",
+        "operationId": "Perform wallet transfer from the parent account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3319,7 +3781,7 @@
     "/v1/transfers/wallet/{accountId}": {
       "post": {
         "description": "You can use this endpoint to perform a wallet transfer.",
-        "operationId": "Perform wallet transfer from account.",
+        "operationId": "Perform wallet transfer from account",
         "requestBody": {
           "content": {
             "application/json": {
@@ -3483,7 +3945,7 @@
     "/v1/transactions/bank/{accountId}": {
       "get": {
         "description": "You can use this endpoint to fetch credit/debit transactions on an account.",
-        "operationId": "Fetch credit/debit transactions on an account.",
+        "operationId": "Fetch credit/debit transactions on an account",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -3677,7 +4139,7 @@
     "/v1/transactions/bank": {
       "get": {
         "description": "You can use this endpoint to fetch credit/debit transactions on the parent account.",
-        "operationId": "Fetch credit/debit transactions on the parent account.",
+        "operationId": "Fetch credit/debit transactions on the parent account",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -3861,7 +4323,7 @@
     "/v1/transactions/accounts/{accountId}": {
       "get": {
         "description": "You can use this endpoint to fetch transactions on an account.",
-        "operationId": "Fetch transactions on an account.",
+        "operationId": "Fetch transactions on an account",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -4053,7 +4515,7 @@
       },
       "post": {
         "description": "You can use this endpoint to filter transactions on an account.",
-        "operationId": "Filter account transactions.",
+        "operationId": "Filter account transactions",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4258,7 +4720,7 @@
     "/v1/transactions/accounts": {
       "get": {
         "description": "You can use this endpoint to fetch transactions on the parent account.",
-        "operationId": "Fetch transactions on the parent account.",
+        "operationId": "Fetch transactions on the parent account",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -4440,7 +4902,7 @@
       },
       "post": {
         "description": "You can use this endpoint to filter transactions on the parent account.",
-        "operationId": "Filter parent account transactions.",
+        "operationId": "Filter parent account transactions",
         "requestBody": {
           "content": {
             "application/json": {
@@ -4767,7 +5229,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Create an online checkout order.",
+        "summary": "Create an online checkout order",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -4921,7 +5383,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "charge a customer using Tokenized card data",
+        "summary": "Charge a customer using tokenized card data",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -5001,35 +5463,35 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                      "code": {
-                        "type": "string",
-                        "example": "00",
-                        "description": "Response Code"
-                      },
-                      "description": {
-                        "type": "string",
-                        "example": "Success",
-                        "description": "response description"
-                      },
-                      "data": {
-                        "type": "object",
-                        "properties":{
-                          "nextPage": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "response description"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties":{
+                        "nextPage": {
                           "type": "string",
                           "format": "int32",
                           "description": "The value of the next page for data retrieval. This value is zero if there are no more pages to retrieve",
                           "example": "2"
-                          },
-                          "tokenizedCardDataList": {
-                            "type": "array",
-                            "description": "Contains all tokenized card data meeting the search criteria",
-                            "items": {
-                              "$ref": 
-                              "#/components/schemas/TokenizedCardData"
-                            }
+                        },
+                        "tokenizedCardDataList": {
+                          "type": "array",
+                          "description": "Contains all tokenized card data meeting the search criteria",
+                          "items": {
+                            "$ref":
+                            "#/components/schemas/TokenizedCardData"
                           }
                         }
                       }
+                    }
                   }
                 }
               }
@@ -5125,7 +5587,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "List Tokenized cards",
+        "summary": "List tokenized cards",
         "tags": [
           "Online Checkout"
         ]
@@ -5264,7 +5726,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Update tokenized card data",
+        "summary": "Update tokenzied card data",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -5416,7 +5878,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Delete tokenzied card data",
+        "summary": "Update tokenzied card data",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -5449,7 +5911,7 @@
         "required": [
           "tokenKey"
         ]
-    },
+      },
       "DeleteTokenizedCardDataResponse": {
         "type": "object",
         "properties": {
@@ -5513,16 +5975,6 @@
       "CreateOrderResponse": {
         "type": "object",
         "properties": {
-          "success": {
-            "type": "boolean",
-            "description": "The response status, true if successful",
-            "example": "true"
-          },
-          "message": {
-            "type": "string",
-            "description": "Response description",
-            "example": "success"
-          },
           "checkoutLink": {
             "type": "string",
             "description": "Payment checkout link",
@@ -5535,8 +5987,8 @@
           }
         },
         "required": [
-          "success",
-          "message"
+          "checkoutLink",
+          "orderReference"
         ]
       },
       "Order": {
@@ -5550,11 +6002,6 @@
           "customerId": {
             "type": "string",
             "description": "customer id",
-            "example": "762878332454"
-          },
-          "accountId": {
-            "type": "string",
-            "description": "the Id of the account whose wallet will be credited for this order. If ignored, the main account wallet will be used.",
             "example": "762878332454"
           },
           "callbackUrl": {
@@ -5591,7 +6038,7 @@
         "description": "The Checkout request object",
         "properties": {
           "order": {
-              "$ref": "#/components/schemas/Order"
+            "$ref": "#/components/schemas/Order"
           },
           "tokenizeCard": {
             "type": "boolean",
@@ -5915,6 +6362,18 @@
             "minLength": 3,
             "maxLength": 3,
             "example": "NGN"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Callback url",
+            "format": "url",
+            "example": "https://webhook.site/98ef100f-5adc-4434-800a-0808h60bd8d7"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiry date",
+            "example": "2023-12-06T15:46:43.000Z"
           }
         },
         "required": [
@@ -6011,6 +6470,18 @@
             "minLength": 3,
             "maxLength": 3,
             "example": "NGN"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Callback url",
+            "format": "url",
+            "example": "https://webhook.site/98ef100f-5adc-4434-800a-0808h60bd8d7"
+          },
+          "expiryDate": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Expiry date",
+            "example": "2023-12-06T15:46:43.000Z"
           }
         },
         "required": [
@@ -6024,6 +6495,152 @@
           "status",
           "type",
           "accountName",
+          "currency"
+        ]
+      },
+      "CreateVirtualAccountRequest": {
+        "type": "object",
+        "properties": {
+          "accountRef": {
+            "type": "string",
+            "description": "Account reference",
+            "minLength": 16,
+            "maxLength": 64,
+            "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account holder's name",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Daniel Scorsese"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "minLength": 3,
+            "maxLength": 3,
+            "example": "NGN"
+          }
+        },
+        "required": [
+          "accountRef",
+          "accountName",
+          "currency"
+        ]
+      },
+      "CreateVirtualAccountResponse": {
+        "type": "object",
+        "properties": {
+          "createdAt": {
+            "type": "string",
+            "description": "Creation timestamp",
+            "format": "date-time",
+            "example": "2023-09-04T07:09:06.900Z"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "Account ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "fc81b80e-e607-4b86-8591-840925191733"
+          },
+          "accountHolderId": {
+            "type": "string",
+            "description": "Account holder ID",
+            "minLength": 36,
+            "maxLength": 36,
+            "example": "01a10aeb-d989-460a-bbde-9842f2b4320f"
+          },
+          "accountRef": {
+            "type": "string",
+            "description": "Account reference",
+            "minLength": 16,
+            "maxLength": 64,
+            "example": "1oWbJQQHLyQqqf1SwxjSpudeA21"
+          },
+          "bvn": {
+            "type": "string",
+            "description": "Bank Verification Number (BVN)",
+            "minLength": 11,
+            "maxLength": 11,
+            "example": "12234412345"
+          },
+          "status": {
+            "type": "string",
+            "description": "Account status",
+            "enum": [
+              "ACTIVE",
+              "INACTIVE",
+              "SUSPENDED",
+              "PND",
+              "BLACKLISTED"
+            ],
+            "example": "ACTIVE"
+          },
+          "type": {
+            "type": "string",
+            "description": "Account type",
+            "enum": [
+              "virtual",
+              "outlet"
+            ],
+            "example": "virtual"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "Account holder's name",
+            "minLength": 8,
+            "maxLength": 64,
+            "example": "Daniel Scorsese"
+          },
+          "banks": {
+            "type": "array",
+            "description": "List of associated bank accounts",
+            "items": {
+              "type": "object",
+              "properties": {
+                "bankAccountNumber": {
+                  "type": "string",
+                  "description": "Bank account number",
+                  "example": "93910"
+                },
+                "bankName": {
+                  "type": "string",
+                  "description": "Bank name",
+                  "example": "Sterling Bank"
+                },
+                "bankAccountName": {
+                  "type": "string",
+                  "description": "Bank account holder name",
+                  "example": "Nomba/Ifeoluwa Adeboye"
+                }
+              },
+              "required": [
+                "bankAccountNumber",
+                "bankName",
+                "bankAccountName"
+              ]
+            }
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency code",
+            "minLength": 3,
+            "maxLength": 3,
+            "example": "NGN"
+          }
+        },
+        "required": [
+          "createdAt",
+          "accountId",
+          "accountHolderId",
+          "accountRef",
+          "bvn",
+          "status",
+          "type",
+          "accountName",
+          "banks",
           "currency"
         ]
       },
