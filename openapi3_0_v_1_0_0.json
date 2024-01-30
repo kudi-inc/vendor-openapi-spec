@@ -5895,10 +5895,343 @@
         "tags": [
           "Online Checkout"
         ]
-      }    }
+      }    
+    },
+    "/v1/checkout/transaction": {
+      "get": {
+        "description": "Fetch checkout transaction",
+        "operationId": "Fetch a checkout transaction",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          },
+          {
+            "description": "Checkout id type to use for this query. Valid values are the 'ORDER_REFERENCE', to use Order reference passed in when generating the checkout link, and 'ORDER_ID' to use the uuid value returned in the checkout link path.",
+            "example": "ORDER_ID",
+            "in": "query",
+            "name": "idType",
+            "schema": {
+              "type": "string",
+              "enum":["ORDER_ID", "ORDER_REFERENCE"]
+            }
+          },
+          {
+            "description": "Checkout transaction id based on the value selected in the idType parameter",
+            "example": "120022e-e6ca27-33ed-ee7872e6ca27",
+            "in": "query",
+            "name": "id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "response description"
+                    },
+                    "data": { 
+                      "$ref": "#/components/schemas/CheckoutTransaction"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List tokenized cards",
+        "tags": [
+          "Online Checkout"
+        ]
+      }    
+    }  
   },
   "components": {
     "schemas": {
+      "CheckoutTransaction": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "True if the transaction is already completed and successful, false otherwise",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message describing the transaction status",
+            "example": "success"
+          },
+          "order": {
+            "$ref":"#/components/schemas/OrderDetails"
+          },
+          "transactionDetails": {
+            "$ref" :"#/components/schemas/CheckoutTransactionDetails"
+          },
+          "transferDetails": {
+            "$ref" :"#/components/schemas/CheckoutTransferDetails"
+          },
+          "cardDetails": {
+            "$ref" :"#/components/schemas/CheckoutCardDetails"
+
+          }
+        }
+
+      },
+      "OrderDetails": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "description": "The internally generated Id for the checkout order",
+            "example": "56e03654-0c32-4d3e-bbd6-a9df22994a12"
+          },
+          "orderReference": {
+            "type": "string",
+            "description": "reference of the online checkout order to be created",
+            "example": "uyett7883"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "customer id",
+            "example": "762878332454"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "The account Id whose wallet will be credited when the order is paid",
+            "example": "56e03654-0c32-4d3e-bbd6-a9df22994a12"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Merchant callback url for redirect after payment",
+            "example": "https://ip:port/merchant.com/callback"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "customer email",
+            "example": "abcde@gmail.com"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount to pay",
+            "example": "10000.00"
+          },
+          "currency": {
+            "type": "string",
+            "description": "currency of the money",
+            "example": "NGN"
+          }
+        }
+      },      
+      "CheckoutTransactionDetails": {
+        "type": "object",
+        "properties": {
+          "transactionDate": {
+            "type": "string",
+            "description": "Date the transaction was created",
+            "example": "2024-01-26 12:05:27.084805"
+          },
+          "paymentReference": {
+            "type": "string",
+            "description": "The payment reference for the transaction",
+            "example": "5844858382134"
+          },
+          "paymentVendorReference": {
+            "type": "string",
+            "description": "The payment reference returned by the payment gateway",
+            "example": "5844858382675493"
+          },
+          "tokenizedCardPayment": {
+            "type": "boolean",
+            "description": "True if the payment was made by a tokenized card",
+            "example": "true"
+          },
+          "statusCode": {
+            "type": "string",
+            "description": "transaction status code returned by the payment gateway",
+            "example": "Payment approved"
+          }
+        }
+      },
+      "CheckoutTransferDetails": {
+        "type": "object",
+        "properties": {
+          "sessionId": {
+            "type": "string",
+            "description": "Transfer sessionId",
+            "example": "67584432178569543"
+          },
+          "beneficiaryAccountName": {
+            "type": "string",
+            "description": "The account name associated with the Merchants Amucha account",
+            "example": "Tope Fade"
+          },
+          "beneficiaryAccountNumber": {
+            "type": "string",
+            "description": "The Flash account number, where the payment was made to",
+            "example": "5844858382"
+          },
+          "originatorAccountName": {
+            "type": "string",
+            "description": "The name of the person making the transfer",
+            "example": "Femi Fash"
+          },
+          "originatorAccountNumber": {
+            "type": "string",
+            "description": "Nuban account number of the person making the transfer",
+            "example": "3409082834"
+          },
+          "narration": {
+            "type": "string",
+            "description": "The naration added by the customer when making the transfer",
+            "example": "Checkout payment"
+          },
+          "destinationInstitutionCode": {
+            "type": "string",
+            "description": "Destination bank code",
+            "example": "true"
+          },
+          "paymentReference": {
+            "type": "string",
+            "description": "Transfer payment reference passed in from NIBSS for the transfer",
+            "example": "44384586756"
+          }
+        }
+      },      
+      "CheckoutCardDetails": {
+        "type": "object",
+        "properties": {
+          "cardPan": {
+            "type": "string",
+            "description": "The masked card pan",
+            "example": "515123 **** **** 6667"
+          },
+          "cardType": {
+            "type": "string",
+            "description": "The Card type",
+            "example": "Verve"
+          },
+          "cardCurrency": {
+            "type": "string",
+            "description": "The card currency",
+            "example": "NGN"
+          },
+          "cardBank": {
+            "type": "string",
+            "description": "Card Bank code",
+            "example": "057"
+          }
+        }
+      },   
       "DeleteTokenizedCardDataRequest": {
         "type": "object",
         "properties": {
