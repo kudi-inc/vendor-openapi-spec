@@ -2363,19 +2363,19 @@
         ]
       }
     },
-    "/v1/terminals/assign/{accountId}": {
+    "/v1/checkout/order": {
       "post": {
-        "description": "You can use this endpoint to assign a terminal to an account.",
-        "operationId": "Assign a terminal to an account",
+        "description": "You can use this endpoint to create an online checkout order. Load the URL returned in 'checkoutLink' property in a browser to allow your customer initiate payment.",
+        "operationId": "Create an online checkout order",
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+                "$ref": "#/components/schemas/CreateOrderRequest"
               }
             }
           },
-          "description": "The request payload required to assign a terminal to an account.",
+          "description": "The request payload required to create a checkout order.",
           "required": true
         },
         "responses": {
@@ -2393,10 +2393,10 @@
                     "description": {
                       "type": "string",
                       "example": "Success",
-                      "description": "Response description"
+                      "description": "checkout order created successful"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/TerminalResult"
+                      "$ref": "#/components/schemas/CreateOrderResponse"
                     }
                   },
                   "required": [
@@ -2498,7 +2498,183 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Assign a terminal to an account",
+        "summary": "Create an online checkout order",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      }
+    },
+    "/v1/checkout/tokenized-card-payment": {
+      "post": {
+        "description": "You can use this endpoint to charge a customer's card using the tokenized card details.",
+        "operationId": "charge customer with tokenized card data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TokenizedCardPaymentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to perform a tokenized payment.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "payment successful"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TokenizedCardPaymentResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Charge a customer using tokenized card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      }
+    },
+    "/v1/checkout/tokenized-card-data": {
+      "get": {
+        "description": "Fetch list of merchant's tokenized cards",
+        "operationId": "List all tokenized cards for merchant",
         "parameters": [
           {
             "description": "The parent accountId of the business.",
@@ -2512,36 +2688,519 @@
             "required": true
           },
           {
-            "description": "The accountId whose terminals are to be fetched.",
-            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
-            "in": "path",
+            "description": "Merchant's email address",
+            "example": "abcde@gmail.com",
+            "in": "query",
+            "name": "customerEmail",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Start date, based on the date the token was created",
+            "example": "2023-08-08T23:59:59",
+            "in": "query",
+            "name": "startDate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "end date, based on the date the token was created",
+            "example": "2023-08-08T23:59:59",
+            "in": "query",
+            "name": "endDate",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Specifies the page number to start retriving data from. For first request, this can be ommited or set to 0",
+            "example": 0,
+            "in": "query",
+            "name": "page",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "response description"
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties":{
+                        "nextPage": {
+                          "type": "string",
+                          "format": "int32",
+                          "description": "The value of the next page for data retrieval. This value is zero if there are no more pages to retrieve",
+                          "example": "2"
+                        },
+                        "tokenizedCardDataList": {
+                          "type": "array",
+                          "description": "Contains all tokenized card data meeting the search criteria",
+                          "items": {
+                            "$ref":
+                            "#/components/schemas/TokenizedCardData"
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "List tokenized cards",
+        "tags": [
+          "Online Checkout"
+        ]
+      },
+      "post": {
+        "description": "Update a tokenized card details",
+        "operationId": "Update tokenized card data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateTokenizedCardDataRequest"
+              }
+            }
+          },
+          "description": "The request payload required to upate the tokenized card data",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/UpdateTokenizedCardDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "Data update successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update tokenzied card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
             "name": "accountId",
-            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      },
+      "delete": {
+        "description": "Delete a tokenized card details",
+        "operationId": "Delete tokenized card data",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeleteTokenizedCardDataRequest"
+              }
+            }
+          },
+          "description": "The request payload required to upate the tokenized card data",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/DeleteTokenizedCardDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "Data update successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Update tokenzied card data",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Online Checkout"
+        ]
+      }    },
+    "/v1/checkout/transaction": {
+      "get": {
+        "description": "Fetch checkout transaction",
+        "operationId": "Fetch a checkout transaction",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          },
+          {
+            "description": "Checkout id type to use for this query. Valid values are the 'ORDER_REFERENCE', to use Order reference passed in when generating the checkout link, and 'ORDER_ID' to use the uuid value returned in the checkout link path.",
+            "example": "ORDER_ID",
+            "in": "query",
+            "name": "idType",
+            "schema": {
+              "type": "string",
+              "enum":["ORDER_ID", "ORDER_REFERENCE"]
+            }
+          },
+          {
+            "description": "Checkout transaction id based on the value selected in the idType parameter",
+            "example": "120022e-e6ca27-33ed-ee7872e6ca27",
+            "in": "query",
+            "name": "id",
             "schema": {
               "type": "string"
             }
           }
         ],
-        "tags": [
-          "Terminals"
-        ]
-      }
-    },
-    "/v1/terminals/assign": {
-      "post": {
-        "description": "You can use this endpoint to assign a terminal to the parent account.",
-        "operationId": "Assign a terminal to the parent account",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TerminalAssignmentRequest"
-              }
-            }
-          },
-          "description": "The request payload required to assign a terminal to an account.",
-          "required": true
-        },
         "responses": {
           "200": {
             "content": {
@@ -2557,17 +3216,12 @@
                     "description": {
                       "type": "string",
                       "example": "Success",
-                      "description": "Response description"
+                      "description": "response description"
                     },
                     "data": {
-                      "$ref": "#/components/schemas/TerminalResult"
+                      "$ref": "#/components/schemas/CheckoutTransaction"
                     }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
+                  }
                 }
               }
             },
@@ -2662,340 +3316,9 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Assign a terminal to the parent account",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
+        "summary": "List tokenized cards",
         "tags": [
-          "Terminals"
-        ]
-      }
-    },
-    "/v1/terminals/unassign/{accountId}": {
-      "post": {
-        "description": "You can use this endpoint to un-assign a terminal from an account.",
-        "operationId": "Un-assign terminal from an account",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TerminalAssignmentRequest"
-              }
-            }
-          },
-          "description": "The request payload required to un-assign a terminal from an account",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "Response description"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/TerminalResult"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Un-assign terminal from an account",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          },
-          {
-            "description": "The accountId whose terminals are to be fetched.",
-            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
-            "in": "path",
-            "name": "accountId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "tags": [
-          "Terminals"
-        ]
-      }
-    },
-    "/v1/terminals/unassign": {
-      "post": {
-        "description": "You can use this endpoint to un-assign a terminal from the parent account.",
-        "operationId": "Un-assign a terminal from the parent account",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TerminalAssignmentRequest"
-              }
-            }
-          },
-          "description": "The request payload required to un-assign a terminal from an account",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "Response description"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/TerminalResult"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Un-assign a terminal from the parent account",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
-        "tags": [
-          "Terminals"
+          "Online Checkout"
         ]
       }
     },
@@ -3929,6 +4252,642 @@
         ],
         "tags": [
           "Transfers"
+        ]
+      }
+    },
+    "/v1/terminals/assign/{accountId}": {
+      "post": {
+        "description": "You can use this endpoint to assign a terminal to an account.",
+        "operationId": "Assign a terminal to an account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to assign a terminal to an account.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Assign a terminal to an account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          },
+          {
+            "description": "The accountId whose terminals are to be fetched.",
+            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
+            "in": "path",
+            "name": "accountId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Terminals"
+        ]
+      }
+    },
+    "/v1/terminals/assign": {
+      "post": {
+        "description": "You can use this endpoint to assign a terminal to the parent account.",
+        "operationId": "Assign a terminal to the parent account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to assign a terminal to an account.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Assign a terminal to the parent account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Terminals"
+        ]
+      }
+    },
+    "/v1/terminals/unassign/{accountId}": {
+      "post": {
+        "description": "You can use this endpoint to un-assign a terminal from an account.",
+        "operationId": "Un-assign terminal from an account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to un-assign a terminal from an account",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Un-assign terminal from an account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          },
+          {
+            "description": "The accountId whose terminals are to be fetched.",
+            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
+            "in": "path",
+            "name": "accountId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "tags": [
+          "Terminals"
+        ]
+      }
+    },
+    "/v1/terminals/unassign": {
+      "post": {
+        "description": "You can use this endpoint to un-assign a terminal from the parent account.",
+        "operationId": "Un-assign a terminal from the parent account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TerminalAssignmentRequest"
+              }
+            }
+          },
+          "description": "The request payload required to un-assign a terminal from an account",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TerminalResult"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Un-assign a terminal from the parent account",
+        "parameters": [
+          {
+            "description": "The parent accountId of the business.",
+            "in": "header",
+            "name": "accountId",
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
+            },
+            "required": true
+          }
+        ],
+        "tags": [
+          "Terminals"
         ]
       }
     },
@@ -5081,965 +6040,6 @@
         ],
         "tags": [
           "Transactions"
-        ]
-      }
-    },
-    "/v1/checkout/order": {
-      "post": {
-        "description": "You can use this endpoint to create an online checkout order. Load the URL returned in 'checkoutLink' property in a browser to allow your customer initiate payment.",
-        "operationId": "Create an online checkout order",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CreateOrderRequest"
-              }
-            }
-          },
-          "description": "The request payload required to create a checkout order.",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "checkout order created successful"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/CreateOrderResponse"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Create an online checkout order",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
-        "tags": [
-          "Online Checkout"
-        ]
-      }
-    },
-    "/v1/checkout/tokenized-card-payment": {
-      "post": {
-        "description": "You can use this endpoint to charge a customer's card using the tokenized card details.",
-        "operationId": "charge customer with tokenized card data",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/TokenizedCardPaymentRequest"
-              }
-            }
-          },
-          "description": "The request payload required to perform a tokenized payment.",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "payment successful"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/TokenizedCardPaymentResponse"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Charge a customer using tokenized card data",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
-        "tags": [
-          "Online Checkout"
-        ]
-      }
-    },
-    "/v1/checkout/tokenized-card-data": {
-      "get": {
-        "description": "Fetch list of merchant's tokenized cards",
-        "operationId": "List all tokenized cards for merchant",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          },
-          {
-            "description": "Merchant's email address",
-            "example": "abcde@gmail.com",
-            "in": "query",
-            "name": "customerEmail",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Start date, based on the date the token was created",
-            "example": "2023-08-08T23:59:59",
-            "in": "query",
-            "name": "startDate",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "end date, based on the date the token was created",
-            "example": "2023-08-08T23:59:59",
-            "in": "query",
-            "name": "endDate",
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
-            "description": "Specifies the page number to start retriving data from. For first request, this can be ommited or set to 0",
-            "example": 0,
-            "in": "query",
-            "name": "page",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "response description"
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties":{
-                        "nextPage": {
-                          "type": "string",
-                          "format": "int32",
-                          "description": "The value of the next page for data retrieval. This value is zero if there are no more pages to retrieve",
-                          "example": "2"
-                        },
-                        "tokenizedCardDataList": {
-                          "type": "array",
-                          "description": "Contains all tokenized card data meeting the search criteria",
-                          "items": {
-                            "$ref":
-                            "#/components/schemas/TokenizedCardData"
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "List tokenized cards",
-        "tags": [
-          "Online Checkout"
-        ]
-      },
-      "post": {
-        "description": "Update a tokenized card details",
-        "operationId": "Update tokenized card data",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UpdateTokenizedCardDataRequest"
-              }
-            }
-          },
-          "description": "The request payload required to upate the tokenized card data",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "Response description"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/UpdateTokenizedCardDataResponse"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "Data update successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Update tokenzied card data",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
-        "tags": [
-          "Online Checkout"
-        ]
-      },
-      "delete": {
-        "description": "Delete a tokenized card details",
-        "operationId": "Delete tokenized card data",
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteTokenizedCardDataRequest"
-              }
-            }
-          },
-          "description": "The request payload required to upate the tokenized card data",
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "Response description"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/DeleteTokenizedCardDataResponse"
-                    }
-                  },
-                  "required": [
-                    "code",
-                    "description",
-                    "data"
-                  ]
-                }
-              }
-            },
-            "description": "Data update successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "Update tokenzied card data",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          }
-        ],
-        "tags": [
-          "Online Checkout"
-        ]
-      }    },
-    "/v1/checkout/transaction": {
-      "get": {
-        "description": "Fetch checkout transaction",
-        "operationId": "Fetch a checkout transaction",
-        "parameters": [
-          {
-            "description": "The parent accountId of the business.",
-            "in": "header",
-            "name": "accountId",
-            "schema": {
-              "type": "string",
-              "format": "uuid",
-              "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
-            },
-            "required": true
-          },
-          {
-            "description": "Checkout id type to use for this query. Valid values are the 'ORDER_REFERENCE', to use Order reference passed in when generating the checkout link, and 'ORDER_ID' to use the uuid value returned in the checkout link path.",
-            "example": "ORDER_ID",
-            "in": "query",
-            "name": "idType",
-            "schema": {
-              "type": "string",
-              "enum":["ORDER_ID", "ORDER_REFERENCE"]
-            }
-          },
-          {
-            "description": "Checkout transaction id based on the value selected in the idType parameter",
-            "example": "120022e-e6ca27-33ed-ee7872e6ca27",
-            "in": "query",
-            "name": "id",
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "code": {
-                      "type": "string",
-                      "example": "00",
-                      "description": "Response Code"
-                    },
-                    "description": {
-                      "type": "string",
-                      "example": "Success",
-                      "description": "response description"
-                    },
-                    "data": {
-                      "$ref": "#/components/schemas/CheckoutTransaction"
-                    }
-                  }
-                }
-              }
-            },
-            "description": "OK - your request was successful.",
-            "headers": {
-              "X-Rate-Limit-Limit": {
-                "description": "The number of allowed requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "40"
-                }
-              },
-              "X-Rate-Limit-Remaining": {
-                "description": "The number of remaining requests in the current period",
-                "schema": {
-                  "type": "string",
-                  "example": "39"
-                }
-              },
-              "X-Rate-Limit-Window": {
-                "description": "The specified rate limit window",
-                "schema": {
-                  "type": "string",
-                  "example": "1s"
-                }
-              }
-            }
-          },
-          "400": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RequestError"
-                }
-              }
-            },
-            "description": "The request body sent by merchant did not pass the validation checks"
-          },
-          "401": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthenticationError"
-                }
-              }
-            },
-            "description": "The access_token provided to access the resource is missing or invalid."
-          },
-          "403": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AuthorizationError"
-                }
-              }
-            },
-            "description": "The client does not have the permissions to access this resource"
-          },
-          "404": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RecordNotFoundError"
-                }
-              }
-            },
-            "description": "The record that the client is trying to access does not exist."
-          },
-          "429": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/RateLimitError"
-                }
-              }
-            },
-            "description": "The client has maxed out the number of calls within a time period on this resource."
-          },
-          "500": {
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ServerError"
-                }
-              }
-            },
-            "description": "Downstream system error."
-          }
-        },
-        "security": [
-          {
-            "BearerAuth": []
-          }
-        ],
-        "summary": "List tokenized cards",
-        "tags": [
-          "Online Checkout"
         ]
       }
     }
