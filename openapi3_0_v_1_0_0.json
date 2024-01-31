@@ -6048,7 +6048,7 @@
             "BearerAuth": []
           }
         ],
-        "summary": "List tokenized cards",
+        "summary": "Fetch checkout transaction",
         "tags": [
           "Online Checkout"
         ]
