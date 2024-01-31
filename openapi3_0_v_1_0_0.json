@@ -6137,8 +6137,9 @@
         "properties": {
           "transactionDate": {
             "type": "string",
+            "format": "date-time",
             "description": "Date the transaction was created",
-            "example": "2024-01-26 12:05:27.084805"
+            "example": "2023-12-06T15:46:43.000Z"
           },
           "paymentReference": {
             "type": "string",
