@@ -38,7 +38,7 @@
   "paths": {
     "/v1/auth/token/issue": {
       "post": {
-        "description": "You can use this endpoint to [authenticate with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing).",
+        "description": "You can use this endpoint to authenticate with Nomba.",
         "operationId": "Obtain access token",
         "requestBody": {
           "content": {
@@ -123,7 +123,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -187,7 +187,7 @@
     },
     "/v1/auth/token/refresh": {
       "post": {
-        "description": "You can use this endpoint to refresh an expired `access_token`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing).",
+        "description": "You can use this endpoint to refresh an expired `access_token`.",
         "operationId": "Refresh an expired token",
         "requestBody": {
           "content": {
@@ -272,7 +272,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -341,7 +341,7 @@
     },
     "/v1/auth/token/revoke": {
       "post": {
-        "description": "You can use this endpoint to revoke an `access_token`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
+        "description": "You can use this endpoint to revoke an `access_token`.",
         "operationId": "Revoke an access_token",
         "requestBody": {
           "content": {
@@ -406,7 +406,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -680,7 +680,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -819,7 +819,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -973,7 +973,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1140,7 +1140,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1282,7 +1282,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1436,7 +1436,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1579,7 +1579,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1735,7 +1735,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -1891,7 +1891,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2105,7 +2105,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2309,7 +2309,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2450,7 +2450,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2614,7 +2614,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2768,7 +2768,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -2932,7 +2932,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3088,7 +3088,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3229,7 +3229,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3289,16 +3289,6 @@
               "example": "890022ce-bae0-45c1-9b9d-ee7872e6ca27"
             },
             "required": true
-          },
-          {
-            "description": "The accountId whose terminals are to be fetched.",
-            "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
-            "in": "path",
-            "name": "accountId",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
           }
         ],
         "tags": [
@@ -3393,7 +3383,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3547,7 +3537,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3711,7 +3701,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3865,7 +3855,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -3990,7 +3980,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -4000,7 +3990,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -4082,7 +4072,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -4174,7 +4164,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -4184,7 +4174,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -4266,7 +4256,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -4368,7 +4358,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -4378,7 +4368,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -4460,7 +4450,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -4599,7 +4589,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -4692,7 +4682,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -4702,7 +4692,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -4755,7 +4745,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -4765,7 +4755,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -4847,7 +4837,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -4986,7 +4976,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5069,7 +5059,7 @@
             "required": false
           },
           {
-            "description": "DateFrom",
+            "description": "This starting date (UTC)",
             "in": "query",
             "name": "dateFrom",
             "example": "2023-09-08T00:00:00.007Z",
@@ -5079,7 +5069,7 @@
             "required": false
           },
           {
-            "description": "DateTo",
+            "description": "This ending date",
             "in": "query",
             "name": "dateTo",
             "example": "2023-08-08T23:59:59.007Z",
@@ -5181,7 +5171,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5335,7 +5325,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5539,7 +5529,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5678,7 +5668,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5830,7 +5820,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -5895,8 +5885,7 @@
         "tags": [
           "Online Checkout"
         ]
-      }    
-    },
+      }    },
     "/v1/checkout/transaction": {
       "get": {
         "description": "Fetch checkout transaction",
@@ -5950,7 +5939,7 @@
                       "example": "Success",
                       "description": "response description"
                     },
-                    "data": { 
+                    "data": {
                       "$ref": "#/components/schemas/CheckoutTransaction"
                     }
                   }
@@ -6000,7 +5989,7 @@
                 }
               }
             },
-            "description": "The access_token provided to access the resource is missing or invalid. Please go through [Authenticating with Nomba](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing) "
+            "description": "The access_token provided to access the resource is missing or invalid."
           },
           "403": {
             "content": {
@@ -6048,12 +6037,12 @@
             "BearerAuth": []
           }
         ],
-        "summary": "Fetch checkout transaction",
+        "summary": "List tokenized cards",
         "tags": [
           "Online Checkout"
         ]
-      }    
-    }  
+      }
+    }
   },
   "components": {
     "schemas": {
@@ -6097,7 +6086,7 @@
           "orderReference": {
             "type": "string",
             "description": "reference of the online checkout order to be created",
-            "example": "uyett7883"
+            "example": "90e81e8a-bc14-4ebf-89c0-57da752cca58"
           },
           "customerId": {
             "type": "string",
@@ -6131,7 +6120,7 @@
             "example": "NGN"
           }
         }
-      },      
+      },
       "CheckoutTransactionDetails": {
         "type": "object",
         "properties": {
@@ -6207,7 +6196,7 @@
             "example": "44384586756"
           }
         }
-      },      
+      },
       "CheckoutCardDetails": {
         "type": "object",
         "properties": {
@@ -6232,7 +6221,7 @@
             "example": "057"
           }
         }
-      },   
+      },
       "DeleteTokenizedCardDataRequest": {
         "type": "object",
         "properties": {
@@ -6317,7 +6306,7 @@
           "orderReference": {
             "type": "string",
             "description": "The reference of the order created",
-            "example": "uyett7883"
+            "example": "90e81e8a-bc14-4ebf-89c0-57da752cca58"
           }
         },
         "required": [
@@ -6331,7 +6320,7 @@
           "orderReference": {
             "type": "string",
             "description": "reference of the online checkout order to be created",
-            "example": "uyett7883"
+            "example": "90e81e8a-bc14-4ebf-89c0-57da752cca58"
           },
           "customerId": {
             "type": "string",
@@ -6556,12 +6545,12 @@
           },
           "type": {
             "type": "string",
-            "description": "Transfer type",
+            "description": "Transaction type",
             "example": "transfer"
           },
           "status": {
             "type": "string",
-            "description": "Transfer status",
+            "description": "Transaction status",
             "example": "SUCCESS"
           }
         },
@@ -6623,14 +6612,14 @@
           "code": {
             "type": "string",
             "description": "The bank's code.",
-            "example": "056",
+            "example": "058",
             "maxLength": 6,
             "minLength": 3
           },
           "name": {
             "type": "string",
             "description": "The bank's name.",
-            "example": "GTB"
+            "example": "Guaranty Trust Bank"
           }
         }
       },
@@ -7413,7 +7402,7 @@
           "updatedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Update timestamp",
+            "description": "Updated timestamp",
             "example": "2023-09-04T15:23:55.173Z"
           }
         },
@@ -7500,11 +7489,8 @@
         },
         "required": [
           "amount",
-          "accountNumber",
-          "bankCode",
-          "accountName",
+          "receiverAccountId",
           "merchantTxRef",
-          "senderName",
           "pin"
         ]
       },
@@ -7535,16 +7521,16 @@
           "id": {
             "type": "string",
             "description": "Transfer ID",
-            "example": "API-TRANSFER-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
+            "example": "API-P2P-C24AD-a6443bf0-011c-4bc2-b739-4a2e33e2a27b"
           },
           "type": {
             "type": "string",
-            "description": "Transfer type",
-            "example": "transfer"
+            "description": "Transaction type",
+            "example": "p2p"
           },
           "status": {
             "type": "string",
-            "description": "Transfer status",
+            "description": "Transaction status",
             "example": "SUCCESS"
           }
         },
@@ -7656,13 +7642,13 @@
           "timeUpdated": {
             "type": "string",
             "format": "date-time",
-            "description": "Update timestamp",
+            "description": "Updated timestamp",
             "example": "2023-09-08T19:05:21.000Z"
           },
           "walletBalance": {
             "type": "number",
             "format": "double",
-            "description": "Wallet balance",
+            "description": "The account balance",
             "example": 285951.0
           },
           "transactionType": {
@@ -7875,7 +7861,7 @@
     },
     "securitySchemes": {
       "BearerAuth": {
-        "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`. For example: `Authorization: {ACCESS_TOKEN}`. More details about Nomba's Oauth Authentication can be found on [NombaAPI Specification Doc](https://docs.google.com/document/d/10mn6LeYpxVe9gr0hdDThUKJmpZW9X1dI3OaMu_vuUis/edit?usp=sharing)",
+        "description": "Nomba authenticates API calls with [OAuth2 HTTP bearer tokens](http://tools.ietf.org/html/rfc6750). There are two methods of authentication; [Client-Credentials method](https://www.rfc-editor.org/rfc/rfc6749) and [PKCE (Proof Key for Code Exchange)](https://www.rfc-editor.org/rfc/rfc7636) method. In each of the methods, You will get an `ACCESS_TOKEN`. You need to use an `\"Authorization\"` HTTP header to provide your `ACCESS_TOKEN`. For example: `Authorization: {ACCESS_TOKEN}`.",
         "scheme": "bearer",
         "type": "http",
         "bearerFormat": "JWT"
