@@ -33,6 +33,9 @@
     },
     {
       "name": "Online Checkout"
+    },
+    {
+      "name": "Charge"
     }
   ],
   "paths": {
@@ -6586,7 +6589,1579 @@
           "Transactions"
         ]
       }
-    }
+    },
+    "/v1/checkout/order/{orderReference}": {
+      "get": {
+        "description": "Use this endpoint to fetch a single checkout order, using the order reference that was returned when the Order was created",
+        "operationId": "Fetch Checkout order details",
+        "parameters": [
+          {
+            "description": "Order referene",
+            "example": "693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea",
+            "in": "path",
+            "name": "orderReference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/GetOrderDetails"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get Order details based on the generated Order reference",
+        "tags": [
+          "Charge"
+        ]
+      }
+    },
+    "v1/checkout/checkout-card-detail": {
+      "post": {
+        "description": "Use this endpoint to submit the customers card details",
+        "operationId": "Submit customer card details",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitCardDetails"
+              }
+            }
+          },
+          "description": "The request payload required to filter account transactions.",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/SubmitCardDetailsResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Submit customer card details",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "v1/checkout/checkout-card-otp": {
+      "post": {
+        "description": "Use this endpoint to submit the payment OTP sent to the customer's phones from the payment gateway",
+        "operationId": "Submit customer payment OTP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubmitCardOTP"
+              }
+            }
+          },
+          "description": "The request payload required to authenticate the Card payment",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/SubmitCardOTPResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Submit customer card OTP",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "v1/checkout/resend-otp": {
+      "post": {
+        "description": "Use this endpoint to resend the payment OTP to the customer's phone",
+        "operationId": "Resend customer payment OTP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutDataRequest"
+              }
+            }
+          },
+          "description": "The request payload required to resend the Card payment",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Resend OTP to customer's phone",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "v1/checkout/confirm-transaction-receipt": {
+      "post": {
+        "description": "Use this endpoint to fetch the checkout transaction details and get the status of the transaction after OTP is submitted or transfer is made",
+        "operationId": "Fetch Checkout transaction details",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutDataRequest"
+              }
+            }
+          },
+          "description": "Fetch checkout transaction details",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutTransactionDetailsResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Fetch checkout transaction details",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "/v1/checkout/get-checkout-kta/{orderReference}": {
+      "get": {
+        "description": "Use this endpoint to Get a flash account number which the customer cna use to make a transfer payment.",
+        "operationId": "Fetch Checkout flash account number",
+        "parameters": [
+          {
+            "description": "Order referene",
+            "example": "693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea",
+            "in": "path",
+            "name": "orderReference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutAccountNumberResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Fetch checkout Flash account number for transfer payment",
+        "tags": [
+          "Charge"
+        ]
+      }
+    },
+
+    "v1/checkout/user-card/auth": {
+      "post": {
+        "description": "Use this endpoint to request an OTP to be sent to be sent to the users phone number to authenticate the user before saving the card. This endpoint is called after payment is successful, and the user requested to save their card for later.",
+        "operationId": "Request user OTP to authenticate user ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutAuthenticateUserRequest"
+              }
+            }
+          },
+          "description": "Request user OTP",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Request user OTP",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "v1/checkout/user-card/saved-card/auth": {
+      "post": {
+        "description": "Use this endpoint to request an OTP to be sent to a user's phone number to authenticate before retrieving the saved cards mapped to the user's email. Use this endpoint when the Order details endpoint indicates the user already has saved cards.",
+        "operationId": "Request user OTP to authenticate user who already has saved cards ",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutDataRequest"
+              }
+            }
+          },
+          "description": "Request user OTP",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Request user OTP",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "v1/checkout/user-card": {
+      "post": {
+        "description": "Use this endpoint to submit the user OTP send to the user's mobile number. This will result in the user's card being saved for later use.",
+        "operationId": "Submit User OTP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutSubmitUserOTPRequest"
+              }
+            }
+          },
+          "description": "Submit User OTP",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Submit user OTP",
+        "tags": [
+          "Charge"
+        ]
+      }
+
+    },
+    "/v1/checkout/user-card/{orderReference}": {
+      "get": {
+        "description": "Use this endpoint to Get a user's saved cards. Requires user OTP send to the user after calling /checkout/user-card/saved-card/auth",
+        "operationId": "Fetch User saved cards",
+        "parameters": [
+          {
+            "description": "Order referene",
+            "example": "693cd007-cd1e-4ea6-8b79-5f5c4d7a83ea",
+            "in": "path",
+            "name": "orderReference",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "otp sent to the user's mobile number",
+            "example": "1234",
+            "in": "query",
+            "name": "otp",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/TokenizedCardDataList"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Get user saved cards",
+        "tags": [
+          "Charge"
+        ]
+      }
+    },
+    "v1/checkout/transaction/cancel": {
+      "post": {
+        "description": "Use this endpoint to Cancel an incomplete checkout transaction",
+        "operationId": "Cancel checkout transaction",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutCancelTransactionRequest"
+              }
+            }
+          },
+          "description": "Submit User OTP",
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "code": {
+                      "type": "string",
+                      "example": "00",
+                      "description": "Response Code"
+                    },
+                    "description": {
+                      "type": "string",
+                      "example": "Success",
+                      "description": "Response description"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/CheckoutDataResponse"
+                    }
+                  },
+                  "required": [
+                    "code",
+                    "description",
+                    "data"
+                  ]
+                }
+              }
+            },
+            "description": "OK - your request was successful.",
+            "headers": {
+              "X-Rate-Limit-Limit": {
+                "description": "The number of allowed requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "40"
+                }
+              },
+              "X-Rate-Limit-Remaining": {
+                "description": "The number of remaining requests in the current period",
+                "schema": {
+                  "type": "string",
+                  "example": "39"
+                }
+              },
+              "X-Rate-Limit-Window": {
+                "description": "The specified rate limit window",
+                "schema": {
+                  "type": "string",
+                  "example": "1s"
+                }
+              }
+            }
+          },
+          "400": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RequestError"
+                }
+              }
+            },
+            "description": "The request body sent by merchant did not pass the validation checks"
+          },
+          "401": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthenticationError"
+                }
+              }
+            },
+            "description": "The access_token provided to access the resource is missing or invalid."
+          },
+          "403": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthorizationError"
+                }
+              }
+            },
+            "description": "The client does not have the permissions to access this resource"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RecordNotFoundError"
+                }
+              }
+            },
+            "description": "The record that the client is trying to access does not exist."
+          },
+          "429": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RateLimitError"
+                }
+              }
+            },
+            "description": "The client has maxed out the number of calls within a time period on this resource."
+          },
+          "500": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ServerError"
+                }
+              }
+            },
+            "description": "Downstream system error."
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "summary": "Cancel Checkout transaction",
+        "tags": [
+          "Charge"
+        ]
+      }
+    }  
   },
   "components": {
     "schemas": {
@@ -6618,6 +8193,421 @@
           }
         }
 
+      },
+      "OrderDetailsObject": {
+        "type": "object",
+        "properties": {
+          "orderId": {
+            "type": "string",
+            "description": "Id generated by Nomba for the checkout order",
+            "example": "56e03654-0c32-4d3e-bbd6-a9df22994a12"
+          },
+          "orderReference": {
+            "type": "string",
+            "description": "Reference of the online checkout order to be created",
+            "example": "90e81e8a-bc14-4ebf-89c0-57da752cca58"
+          },
+          "customerId": {
+            "type": "string",
+            "description": "Customer id",
+            "example": "762878332454"
+          },
+          "accountId": {
+            "type": "string",
+            "description": "The account Id whose wallet will be credited when the order is paid",
+            "example": "56e03654-0c32-4d3e-bbd6-a9df22994a12"
+          },
+          "callbackUrl": {
+            "type": "string",
+            "description": "Merchant callback url for redirect after payment",
+            "example": "https://ip:port/merchant.com/callback"
+          },
+          "customerEmail": {
+            "type": "string",
+            "description": "Customer email",
+            "example": "abcde@gmail.com"
+          },
+          "amount": {
+            "type": "number",
+            "format": "double",
+            "description": "Amount to pay",
+            "example": "10000.00"
+          },
+          "currency": {
+            "type": "string",
+            "description": "Currency of the money",
+            "enum": [
+              "NGN"
+            ],
+            "example": "NGN"
+          },
+          "businessName": {
+            "type": "string",
+            "description": "Business Name",
+            "example": "Merchant Ltd"
+          },
+          "businessEmail": {
+            "type": "string",
+            "description": "Business email",
+            "example": "abcde@gmail.com"
+          },
+          "businessLogo": {
+            "type": "string",
+            "description": "Link to business logo",
+            "example": "https://ip:port/merchant.com/logo"
+          }
+        }
+      },
+      "GetOrderDetails": {
+        "type": "object",
+        "properties": {
+          "order": {
+            "$ref":"#/components/schemas/OrderDetailsObject"
+          },
+          "hasSavedCards": {
+            "type": "boolean",
+            "description": "true if the user has saved cards",
+            "example": "true"
+          },
+          "base64EncodedRsaPublicKey": {
+            "type": "string",
+            "description": "Base64 encoded RSA public key, returned if data encryption is enabled to submit the card details, else an empty string",
+            "example": "5844858382"
+          }
+        }
+      },
+      "DeviceInformation": {
+        "type": "object",
+        "properties": {
+          "httpBrowserLanguage": {
+            "type": "string",
+            "description": "Browser language",
+            "example": "en-GB"
+          },
+          "httpBrowserJavaEnabled": {
+            "type": "boolean",
+            "description": "true if Java is enabled in the browser in use",
+            "example": "true"
+          },
+          "httpBrowserJavaScriptEnabled": {
+            "type": "boolean",
+            "description": "true if Javascript is enabled in the browser in use",
+            "example": "true"
+          },
+          "httpBrowserColorDepth": {
+            "type": "string",
+            "description": "Browser color depth",
+            "example": "30"
+          },
+          "httpBrowserScreenHeight": {
+            "type": "string",
+            "description": "Browser scren height",
+            "example": "900"
+          },
+          "httpBrowserScreenWidth": {
+            "type": "string",
+            "description": "Browser screen weidth",
+            "example": "1500"
+          },
+          "httpBrowserTimeDifference": {
+            "type": "string",
+            "description": "Browser time difference",
+            "example": "-60"
+          },
+          "userAgentBrowserValue": {
+            "type": "string",
+            "description": "Browser user agent",
+            "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)"
+          },
+          "deviceChannel": {
+            "type": "string",
+            "description": "Device channel",
+            "example": "Browser"
+          }
+        }
+      },
+      "SecureAuthenticationData": {
+        "type": "object",
+        "description": "Authentication data returned from the payment gateway when the payment card requires 3D Secure authentication. This data will be passed to the",
+        "properties": {
+          "jwt": {
+            "type": "string",
+            "description": "jwt token",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          },
+          "md": {
+            "type": "string",
+            "description": "encryption key is data encrption is in use, else empty string",
+            "example": "6775843012"
+          },
+          "acsUrl": {
+            "type": "string",
+            "description": "the order reference returned when the order was created",
+            "example": "https://ip:port/merchant.com/callback"
+          },
+          "termUrl": {
+            "type": "string",
+            "description": "the order reference returned when the order was created",
+            "example": "https://ip:port/merchant.com/callback"
+          }
+        }
+      },
+      "SubmitCardDetails": {
+        "type": "object",
+        "properties": {
+          "cardDetails": {
+            "type": "string",
+            "description": "Stringified card details",
+            "example": "{\"cardCVV\": 11,\"cardExpiryMonth\": 3,\"cardExpiryYear\": 2050,\"cardNumber\": \"5190752909999995\",\"cardPin\": 1111}"
+          },
+          "key": {
+            "type": "string",
+            "description": "encryption key is data encrption is in use, else empty string",
+            "example": ""
+          },
+          "orderReference": {
+            "type": "string",
+            "description": "the order reference returned when the order was created",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "saveCard": {
+            "type": "boolean",
+            "description": "if true, this this user cardn will be saved for the user's future use. Note the process is not complete until the user-card verification endpoints are called to authenticate the user's phone number.",
+            "example": "true"
+          },
+          "deviceInformation": {
+            "description": "Contains browser information for the device making the api calls",
+            "$ref":"#/components/schemas/DeviceInformation"
+          }
+        }
+      },
+      "SubmitCardDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "true if the card details were submitted successfully",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "Response message describing the transaction status or further instruction for the user like the case of OTP",
+            "example": "Success"
+          },
+          "responseCode": {
+            "type": "string",
+            "description": "response code from the payment gate way. 00 means transaction was successful and completed, T0 means an OTP has been sent to the user and should be entered next, SO means  3D Secure authentication is required and the client application needs to redirect to the 3D secure page based on the information provided in the  secureAuthenticationData field",
+            "example": "00"
+          },
+          "transactionId": {
+            "type": "string",
+            "description": "the unique id of the transaction just created by the submittion of the card details. This value should be passed back to all API calls that require it.",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "secureAuthenticationData": {
+            "description": "Secure authentication data for 3D secure authentication. If present, then the client application must redirect the user to the termUrl provided and pass the jwt and md values",
+            "$ref":"#/components/schemas/SecureAuthenticationData"
+          }
+        }
+
+      },
+      "SubmitCardOTP": {
+        "type": "object",
+        "properties": {
+          "otp": {
+            "type": "string",
+            "description": "otp send to the customer's mobile phone",
+            "example": "1234"
+          },
+          "orderReference": {
+            "type": "string",
+            "description": "order reference",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "transactionId": {
+            "type": "string",
+            "description": "transaction id returend when the card details were submitted",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          }
+        },
+        "required":[
+          "otp",
+          "orderReference",
+          "transactionId"
+        ]
+      },
+      "SubmitCardOTPResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "true is the transaction was successful",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "details response message",
+            "example": "success"
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
+      },
+      "CheckoutDataRequest": {
+        "type": "object",
+        "properties": {
+          "orderReference": {
+            "type": "string",
+            "description": "order reference",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          }
+        },
+        "required":[
+          "orderReference"
+        ]
+      },
+      "CheckoutDataResponse": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "description": "true is the transaction was successful",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "details response message",
+            "example": "success"
+          }
+        },
+        "required": [
+          "success",
+          "message"
+        ]
+      },
+      "CheckoutTransactionDetailsResponse": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean",
+            "description": "true is the transaction was successful",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "description": "details response message",
+            "example": "success"
+          },
+          "order": {
+            "$ref": "#/components/schemas/OrderDetailsObject"
+          }
+        },
+        "required": [
+          "status",
+          "message"
+        ]
+
+      },
+      "CheckoutAccountNumberResponse": {
+        "type": "object",
+        "properties": {
+          "accountNumber": {
+            "type": "string",
+            "description": "true is the transaction was successful",
+            "example": "5678576432"
+          },
+          "accountName": {
+            "type": "string",
+            "description": "account name",
+            "example": "Femi Fash"
+          },
+          "bankName": {
+            "type": "string",
+            "description": "Bank name",
+            "example": "Amucha Mfb"
+          }
+        },
+        "required": [
+          "accountNumber",
+          "accountName",
+          "bankName"
+        ]
+      },
+      "CheckoutAuthenticateUserRequest": {
+        "type": "object",
+        "properties": {
+          "orderReference": {
+            "type": "string",
+            "description": "order reference",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "customer's phone number",
+            "example": "08012345678"
+          }
+        },
+        "required": [
+          "orderReference",
+          "phoneNumber"
+        ]
+
+      },
+      "CheckoutSubmitUserOTPRequest": {
+        "type": "object",
+        "properties": {
+          "orderReference": {
+            "type": "string",
+            "description": "order reference",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "phoneNumber": {
+            "type": "string",
+            "description": "customer's phone number",
+            "example": "08012345678"
+          },
+          "otp": {
+            "type": "string",
+            "description": "otp send to the customer's mobile phone",
+            "example": "1234"
+          }
+        },
+        "required": [
+          "orderReference",
+          "phoneNumber",
+          "otp"
+        ] 
+      },
+      "CheckoutCancelTransactionRequest": {
+        "type": "object",
+        "properties": {
+          "transactionId": {
+            "type": "string",
+            "description": "the transaction Id returned when the card details were submitted",
+            "example": "c4307d58-2513-41d8-b7f7-dfecd5f9fdbe"
+          },
+          "forceCancel": {
+            "type": "boolean",
+            "description": "Force the cancelation of the transaction",
+            "example": "false"
+          }
+        },
+        "required": [
+          "transactionId",
+          "forceCancel"
+        ]
+      },
+      "TokenizedCardDataList": {
+        "type": "object",
+        "properties": {
+          "tokenizedCardData": {
+            "items":{
+              "$ref": "#/components/schemas/TokenizedCardData"
+            }
+          }
+        }
       },
       "OrderDetails": {
         "type": "object",
