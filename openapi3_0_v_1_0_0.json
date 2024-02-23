@@ -9005,7 +9005,7 @@
           "cardDetails": {
             "type": "string",
             "description": "Stringified card details",
-            "example": "{\"cardCVV\": 11,\"cardExpiryMonth\": 3,\"cardExpiryYear\": 2050,\"cardNumber\": \"5190752909999995\",\"cardPin\": 1111}"
+            "example": "{\"cardCVV\": 111,\"cardExpiryMonth\": 3,\"cardExpiryYear\": 2050,\"cardNumber\": \"5190752909999995\",\"cardPin\": 1111}"
           },
           "key": {
             "type": "string",
