@@ -9670,14 +9670,18 @@
             "type": "string",
             "description": "Merchant Transaction Identifier reference (Unique to merchant)",
             "example": "3bvwhibh38220dsjakTwvb"
+          },
+          "senderName": {
+            "type": "string",
+            "description": "A name to describe the sender of the airtime",
+            "example": "John Doe"
           }
         },
         "required": [
           "amount",
           "phoneNumber",
           "network",
-          "merchantTxRef",
-          "senderName"
+          "merchantTxRef"
         ]
       },
       "AirtimePurchaseResponse": {
@@ -9744,14 +9748,18 @@
             "type": "string",
             "description": "Merchant Transaction Identifier reference (Unique to merchant)",
             "example": "3bvwhibh38220dsjakTwvb"
+          },
+          "senderName": {
+            "type": "string",
+            "description": "A name to describe the sender of the data",
+            "example": "John Doe"
           }
         },
         "required": [
           "amount",
           "phoneNumber",
           "network",
-          "merchantTxRef",
-          "senderName"
+          "merchantTxRef"
         ]
       },
       "DataVendingResponse": {
