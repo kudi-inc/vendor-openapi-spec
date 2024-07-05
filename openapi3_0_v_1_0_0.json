@@ -9660,12 +9660,15 @@
             "maxLength": 13,
             "example": "08055441122"
           },
-          "network": {
-            "type": "string",
-            "description": "Recipient network (telco)",
-            "minLength": 3,
-            "example": "glo"
-          },
+         "network": {
+          "type": "string",
+          "description": "Recipient network (telco). It can also come as lowercased values e.g. glo, mtn etc.",
+          "minLength": 3,
+          "enum": [
+            "GLO", "MTN", "9MOBILE", "AIRTEL"
+          ],
+          "example": "GLO"
+        },
           "merchantTxRef": {
             "type": "string",
             "description": "Merchant Transaction Identifier reference (Unique to merchant)",
@@ -9738,11 +9741,14 @@
             "maxLength": 13,
             "example": "08055441122"
           },
-          "network": {
+           "network": {
             "type": "string",
-            "description": "Recipient network (telco)",
+            "description": "Recipient network (telco). It can also come as lowercased values e.g. glo, mtn etc.",
             "minLength": 3,
-            "example": "glo"
+            "enum": [
+              "GLO", "MTN", "9MOBILE", "AIRTEL"
+            ],
+            "example": "GLO"
           },
           "merchantTxRef": {
             "type": "string",
