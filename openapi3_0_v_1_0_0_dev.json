@@ -10715,8 +10715,7 @@
         ],
         "tags": ["Electricity Vending"]
       }
-    }
-  },
+    },
   "components": {
     "schemas": {
       "AirtimePurchaseRequest": {
