@@ -7029,7 +7029,7 @@
             "required": true
           },
           {
-            "description": "The accountId whose terminals are to be fetched.",
+            "description": "The accountId whose transactions are to be fetched.",
             "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
             "in": "path",
             "name": "subAccountId",
@@ -7395,7 +7395,7 @@
             "required": true
           },
           {
-            "description": "The accountId whose terminals are to be fetched.",
+            "description": "The accountId whose transactions are to be fetched.",
             "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
             "in": "path",
             "name": "subAccountId",
@@ -7709,7 +7709,7 @@
             "required": true
           },
           {
-            "description": "The accountId whose terminals are to be fetched.",
+            "description": "The accountId whose transactions are to be fetched.",
             "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
             "in": "path",
             "name": "subAccountId",
@@ -8145,7 +8145,7 @@
             "required": true
           },
           {
-            "description": "The accountId whose transactions are to be fetched.",
+            "description": "The accountId whose transactions is to be fetched.",
             "example": "2242b79d-f2cf-4ccc-ada1-e890bd1a9f0d",
             "in": "path",
             "name": "subAccountId",
